@@ -1,0 +1,10 @@
+html,
+body,
+.app,
+.main-content {
+    height: 100%;
+}
+
+.section.is-fullheight {
+    height: 100%;
+}
