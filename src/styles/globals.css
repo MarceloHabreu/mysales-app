@@ -1,4 +1,4 @@
-html,
+/* html,
 body,
 .app,
 .main-content {
@@ -8,3 +8,8 @@ body,
 .section.is-fullheight {
     height: 100%;
 }
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

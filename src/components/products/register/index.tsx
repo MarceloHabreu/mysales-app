@@ -23,7 +23,8 @@ export const ProductsRegistration: React.FC = () => {
         setDescription(e.target.value);
     };
 
-    const submit = () => {
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
         const product = {
             sku,
             price,
@@ -35,49 +36,39 @@ export const ProductsRegistration: React.FC = () => {
 
     return (
         <Layout title="Products">
-            <div className="columns">
-                <Input id="inputSku" label="SKU: *" columnClasses="is-half" onChange={handleSkuChange} value={sku} placeholder="Enter the product sku" />
-                <Input
-                    id="inputPrice"
-                    label="Price: *"
-                    columnClasses="is-half"
-                    onChange={handlePriceChange}
-                    value={price}
-                    placeholder="Enter the product price"
-                />
-            </div>
-
-            <div className="columns">
-                <Input id="inputName" label="Name: *" columnClasses="is-full" onChange={handleNameChange} value={name} placeholder="Enter the product name" />
-            </div>
-
-            <div className="columns">
-                <div className="field column is-full">
-                    <label className="label" htmlFor="inputDesc">
+            <form className="h-full mt-7 flex flex-col gap-6" onSubmit={submit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Input id="inputSku" label="SKU: *" onChange={handleSkuChange} value={sku} placeholder="Enter the product sku" />
+                    <Input id="inputPrice" label="Price: *" onChange={handlePriceChange} value={price} placeholder="Enter the product price" />
+                </div>
+                <Input id="inputName" label="Name: *" onChange={handleNameChange} value={name} placeholder="Enter the product name" />
+                <div>
+                    <label className="block text-gray-700 text-xl font-bold mb-2" htmlFor="inputDesc">
                         Description: *
                     </label>
-                    <div className="control">
-                        <textarea
-                            id="inputDesc"
-                            value={description}
-                            onChange={handleDescriptionChange}
-                            className="textarea"
-                            placeholder="Enter the product description"
-                        />
-                    </div>
+                    <textarea
+                        id="inputDesc"
+                        value={description}
+                        onChange={handleDescriptionChange}
+                        className="shadow appearance-none border rounded w-full h-40 resize-none py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Enter the product description"
+                    />
                 </div>
-            </div>
-
-            <div className="field is-grouped">
-                <div className="control">
-                    <button className="button is-link" onClick={submit}>
+                <div className="flex justify-end gap-4">
+                    <button
+                        type="button"
+                        className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        Back
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
                         Save
                     </button>
                 </div>
-                <div className="control">
-                    <button className="button is-dark">Back</button>
-                </div>
-            </div>
+            </form>
         </Layout>
     );
 };

@@ -1,16 +1,17 @@
-import Link from "next/link";
-export const Menu: React.FC = () => {
+export const Sidebar: React.FC = () => {
     return (
-        <aside className="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile ">
-            <p className="menu-label is-hidden-touch">My Sales</p>
-            <ul className="menu-list">
+        <aside className="w-72 bg-zinc-950 p-6 ">
+            <p className="font-semibold text-3xl text-center text-zinc-200  mb-4">My Sales</p>
+            <nav className="space-y-5 mt-6 pt-6 border-t border-zinc-700 "></nav>
+
+            <nav className="space-y-5 items-center flex flex-col gap-3">
                 <MenuItem href="/" label="Home" />
-                <MenuItem href="/" label="Products" />
+                <MenuItem href="/registrations/products" label="Products" />
                 <MenuItem href="/" label="Clients" />
                 <MenuItem href="/" label="Sales" />
                 <MenuItem href="/" label="Report" />
                 <MenuItem href="/" label="Logout" />
-            </ul>
+            </nav>
         </aside>
     );
 };
@@ -19,13 +20,10 @@ interface MenuItemsProps {
     href: string;
     label: string;
 }
-
 const MenuItem: React.FC<MenuItemsProps> = (props: MenuItemsProps) => {
     return (
-        <li>
-            <Link href={props.href}>
-                <span className="icon"></span> {props.label}
-            </Link>
-        </li>
+        <a href={props.href} className="flex gap-3 text-2xl text-zinc-400 hover:text-zinc-100">
+            <span className="icon"></span> {props.label}
+        </a>
     );
 };

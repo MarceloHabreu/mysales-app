@@ -6,7 +6,9 @@ const Home: React.FC = () => {
             <Head>
                 <title>Sales-App</title>
             </Head>
-            <Layout />
+            <div className="h-screen">
+                <Layout />
+            </div>
         </div>
     );
 };

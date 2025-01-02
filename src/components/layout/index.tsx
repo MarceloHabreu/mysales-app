@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Menu } from "./menu";
+import { Sidebar } from "./menu";
 
 interface LayoutProps {
     title?: string;
@@ -8,22 +8,20 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
     return (
-        <div className="app">
-            <section className="main-content columns is-fullheight">
-                <Menu />
-                <div className="container column is-10">
-                    <div className="section ">
-                        <div className="card ">
-                            <div className="card-header">
-                                <p className="card-header-title">{props.title}</p>
-                            </div>
-                            <div className="card-content">
-                                <div className="content">{props.children}</div>
-                            </div>
+        <div className="h-screen flex flex-col">
+            <div className="flex flex-1">
+                <Sidebar />
+                <main className="flex-1 p-6">
+                    <div className="h-4/5 max-w-4/5 mx-auto bg-white rounded-xl shadow-xl p-8">
+                        <div className="md-flex">
+                            <h2 className="uppercase tracking-wide text-3xl text-gray-800 font-semibold">{props.title}</h2>
+                        </div>
+                        <div className="mt-2">
+                            <div className="">{props.children}</div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </main>
+            </div>
         </div>
     );
 };
