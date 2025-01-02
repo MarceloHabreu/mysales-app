@@ -1,8 +1,8 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, ChangeEventHandler, ChangeEvent } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
-    onChange?: (value) => void;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     label: string;
     columnClasses?: string;
 }
@@ -17,9 +17,9 @@ export const Input: React.FC<InputProps> = ({ onChange, label, columnClasses, id
                 <input
                     id={id}
                     {...inputProps}
-                    onChange={(e) => {
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         if (onChange) {
-                            onChange(e.target.value);
+                            onChange(e);
                         }
                     }}
                     className="input"

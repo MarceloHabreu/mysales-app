@@ -5,8 +5,10 @@ export const Menu: React.FC = () => {
             <p className="menu-label is-hidden-touch">My Sales</p>
             <ul className="menu-list">
                 <MenuItem href="/" label="Home" />
-                <MenuItem href="/" label="Add Product" />
-                <MenuItem href="/" label="Config" />
+                <MenuItem href="/" label="Products" />
+                <MenuItem href="/" label="Clients" />
+                <MenuItem href="/" label="Sales" />
+                <MenuItem href="/" label="Report" />
                 <MenuItem href="/" label="Logout" />
             </ul>
         </aside>

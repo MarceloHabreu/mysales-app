@@ -1,11 +1,27 @@
 import { Input, Layout } from "components";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 export const ProductsRegistration: React.FC = () => {
     const [sku, setSku] = useState<string>("");
     const [price, setPrice] = useState<string>("");
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+
+    const handleSkuChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSku(e.target.value);
+    };
+
+    const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPrice(e.target.value);
+    };
+
+    const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+
+    const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        setDescription(e.target.value);
+    };
 
     const submit = () => {
         const product = {
@@ -20,12 +36,19 @@ export const ProductsRegistration: React.FC = () => {
     return (
         <Layout title="Products">
             <div className="columns">
-                <Input id="inputSku" label="SKU: *" columnClasses="is-half" onChange={setSku} value={sku} placeholder="Enter the product sku" />
-                <Input id="inputPrice" label="Price: *" columnClasses="is-half" onChange={setPrice} value={price} placeholder="Enter the product price" />
+                <Input id="inputSku" label="SKU: *" columnClasses="is-half" onChange={handleSkuChange} value={sku} placeholder="Enter the product sku" />
+                <Input
+                    id="inputPrice"
+                    label="Price: *"
+                    columnClasses="is-half"
+                    onChange={handlePriceChange}
+                    value={price}
+                    placeholder="Enter the product price"
+                />
             </div>
 
             <div className="columns">
-                <Input id="inputName" label="Name: *" columnClasses="is-full" onChange={setName} value={name} placeholder="Enter the product name" />
+                <Input id="inputName" label="Name: *" columnClasses="is-full" onChange={handleNameChange} value={name} placeholder="Enter the product name" />
             </div>
 
             <div className="columns">
@@ -37,9 +60,9 @@ export const ProductsRegistration: React.FC = () => {
                         <textarea
                             id="inputDesc"
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={handleDescriptionChange}
                             className="textarea"
-                            placeholder="Enter the product decsription"
+                            placeholder="Enter the product description"
                         />
                     </div>
                 </div>
