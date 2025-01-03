@@ -12,7 +12,7 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
             <div className="flex flex-1">
                 <Sidebar />
                 <main className="flex-1 p-6">
-                    <div className="h-4/5 max-w-4/5 mx-auto bg-white rounded-xl shadow-xl p-8">
+                    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-xl p-8 overflow-auto">
                         <div className="md-flex">
                             <h2 className="uppercase tracking-wide text-3xl text-gray-800 font-semibold">{props.title}</h2>
                         </div>

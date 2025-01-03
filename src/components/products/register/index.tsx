@@ -1,11 +1,16 @@
+import { useProductService } from "@/app/services";
 import { Input, Layout } from "components";
 import { useState, ChangeEvent } from "react";
+import { Product } from "app/models/products";
 
 export const ProductsRegistration: React.FC = () => {
+    const service = useProductService();
     const [sku, setSku] = useState<string>("");
     const [price, setPrice] = useState<string>("");
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [id, setId] = useState<string>("");
+    const [registration, setRegistration] = useState<string>("");
 
     const handleSkuChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSku(e.target.value);
@@ -25,18 +30,27 @@ export const ProductsRegistration: React.FC = () => {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const product = {
+        const product: Product = {
             sku,
-            price,
+            price: parseFloat(price),
             name,
             description,
         };
-        console.log(product);
+        service.save(product).then((productResponse) => {
+            setId(productResponse.id);
+            setRegistration(productResponse.registrationDate);
+        });
     };
 
     return (
         <Layout title="Products">
-            <form className="h-full mt-7 flex flex-col gap-6" onSubmit={submit}>
+            <form className="h-full mt-4 flex flex-col gap-4" onSubmit={submit}>
+                {id && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-zinc-400">
+                        <Input className="text-gray-800" id="inputId" label="Id:" value={id} disabled />
+                        <Input className="text-gray-800" id="inputRegistration" label="Registration:" value={registration} disabled />
+                    </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Input id="inputSku" label="SKU: *" onChange={handleSkuChange} value={sku} placeholder="Enter the product sku" />
                     <Input id="inputPrice" label="Price: *" onChange={handlePriceChange} value={price} placeholder="Enter the product price" />
