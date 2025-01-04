@@ -18,4 +18,10 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@RequestBody ProductRequestDTO p){
         return service.save(p);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO p) {
+        return service.update(id,p);
+    }
 }
+

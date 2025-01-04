@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductService {
 
@@ -22,5 +24,23 @@ public class ProductService {
         product.setDescription(p.description());
         product.setRegistrationDate(p.registration());
         return new ResponseEntity<>(repository.save(product), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> update(Long id, ProductRequestDTO p){
+        Optional<Product> productOptional = repository.findById(id);
+
+        if (productOptional.isPresent()){
+            Product existingProduct = productOptional.get();
+            existingProduct.setName(p.name());
+            existingProduct.setDescription(p.description());
+            existingProduct.setSku(p.sku());
+            existingProduct.setPrice(p.price());
+
+            repository.save(existingProduct);
+            return ResponseEntity.ok().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

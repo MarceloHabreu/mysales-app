@@ -2,6 +2,7 @@ import { useProductService } from "@/app/services";
 import { Input, Layout } from "components";
 import { useState, ChangeEvent } from "react";
 import { Product } from "app/models/products";
+import { convertToBigDecimal } from "@/app/utils/money";
 
 export const ProductsRegistration: React.FC = () => {
     const service = useProductService();
@@ -30,16 +31,23 @@ export const ProductsRegistration: React.FC = () => {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
+
         const product: Product = {
+            id,
             sku,
-            price: parseFloat(price),
+            price: convertToBigDecimal(price),
             name,
             description,
         };
-        service.save(product).then((productResponse) => {
-            setId(productResponse.id);
-            setRegistration(productResponse.registrationDate);
-        });
+
+        if (id) {
+            service.update(product).then((response) => console.log("updated"));
+        } else {
+            service.save(product).then((productResponse) => {
+                setId(productResponse.id);
+                setRegistration(productResponse.registrationDate);
+            });
+        }
     };
 
     return (
@@ -53,7 +61,15 @@ export const ProductsRegistration: React.FC = () => {
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Input id="inputSku" label="SKU: *" onChange={handleSkuChange} value={sku} placeholder="Enter the product sku" />
-                    <Input id="inputPrice" label="Price: *" onChange={handlePriceChange} value={price} placeholder="Enter the product price" />
+                    <Input
+                        id="inputPrice"
+                        label="Price: *"
+                        onChange={handlePriceChange}
+                        value={price}
+                        placeholder="Enter the product price"
+                        currency
+                        maxLength={16}
+                    />
                 </div>
                 <Input id="inputName" label="Name: *" onChange={handleNameChange} value={name} placeholder="Enter the product name" />
                 <div>
@@ -77,9 +93,11 @@ export const ProductsRegistration: React.FC = () => {
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        className={`${
+                            id ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"
+                        } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
                     >
-                        Save
+                        {id ? "Update" : "Save"}
                     </button>
                 </div>
             </form>
