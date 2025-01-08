@@ -2,13 +2,16 @@ package io.github.marcelohabreu.sales_api.services;
 
 import io.github.marcelohabreu.sales_api.DTO.ProductRequestDTO;
 import io.github.marcelohabreu.sales_api.models.Product;
-import io.github.marcelohabreu.sales_api.repositories.ProductRepository;  // Certifique-se de ter o import correto
+import io.github.marcelohabreu.sales_api.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -43,4 +46,38 @@ public class ProductService {
             return ResponseEntity.notFound().build();
         }
     }
+
+    public List<ProductRequestDTO> listAll() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
+                .map(product -> new ProductRequestDTO(
+                        product.getId(),
+                        product.getSku(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice(),
+                        product.getRegistrationDate()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public ResponseEntity<ProductRequestDTO> getById(Long id) {
+        Optional<Product> productOptional = repository.findById(id);
+
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            ProductRequestDTO productDTO = new ProductRequestDTO(
+                    product.getId(),
+                    product.getSku(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getRegistrationDate()
+            );
+            return ResponseEntity.ok(productDTO);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+
 }

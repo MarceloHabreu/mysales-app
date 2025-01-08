@@ -1,1 +1,2 @@
-export { ProductsRegistration } from "./register";
+export { ProductRegistration } from "./register";
+export { ProductList } from "./list";

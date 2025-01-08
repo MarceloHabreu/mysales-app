@@ -1,2 +1,2 @@
-import { ProductsRegistration } from "components";
-export default ProductsRegistration;
+import { ProductRegistration } from "components";
+export default ProductRegistration;

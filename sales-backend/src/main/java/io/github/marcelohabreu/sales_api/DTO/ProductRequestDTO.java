@@ -4,7 +4,7 @@ package io.github.marcelohabreu.sales_api.DTO;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record ProductRequestDTO(
+public record ProductFormDTO(
         String sku,
         String name,
         String description,
