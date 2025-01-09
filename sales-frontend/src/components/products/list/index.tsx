@@ -7,12 +7,14 @@ import { httpClient } from "@/app/http";
 import { AxiosResponse } from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRouter } from "next/router";
+import { useProductService } from "@/app/services";
 
 export const ProductList: React.FC = () => {
     const { data: result, error } = useSWR<AxiosResponse<Product[]>>("/api/products", (url: string) =>
         httpClient.get(url)
     );
 
+    const service = useProductService();
     const router = useRouter();
 
     if (!result) {
@@ -30,7 +32,9 @@ export const ProductList: React.FC = () => {
     };
 
     const remove = (product: Product) => {
-        console.log(product);
+        service.deleteProduct(product.id || "").then((response) => {
+            mutate("/api/products");
+        });
     };
 
     return (
@@ -43,7 +47,7 @@ export const ProductList: React.FC = () => {
                     <AddCircleOutlineIcon className="mr-1 " /> New Product
                 </button>
             </a>
-            <TableProducts onEdit={update} onDelete={remove} products={result?.data || ["Without Products"]} />
+            <TableProducts onEdit={update} onDelete={remove} products={result?.data || [""]} />
         </Layout>
     );
 };

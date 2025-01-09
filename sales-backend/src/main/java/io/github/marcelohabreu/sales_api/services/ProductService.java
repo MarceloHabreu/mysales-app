@@ -25,7 +25,7 @@ public class ProductService {
         product.setPrice(p.price());
         product.setName(p.name());
         product.setDescription(p.description());
-        product.setRegistrationDate(p.registration());
+        product.setRegistration(p.registration());
         return new ResponseEntity<>(repository.save(product), HttpStatus.CREATED);
     }
 
@@ -55,7 +55,7 @@ public class ProductService {
                         product.getName(),
                         product.getDescription(),
                         product.getPrice(),
-                        product.getRegistrationDate()
+                        product.getRegistration()
                 ))
                 .collect(Collectors.toList());
     }
@@ -71,12 +71,23 @@ public class ProductService {
                     product.getName(),
                     product.getDescription(),
                     product.getPrice(),
-                    product.getRegistrationDate()
+                    product.getRegistration()
             );
             return ResponseEntity.ok(productDTO);
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<?> delete(Long id){
+        Optional<Product> productOptional = repository.findById(id);
+        if (productOptional.isPresent()){
+            Product productExistent = productOptional.get();
+            repository.delete(productExistent);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

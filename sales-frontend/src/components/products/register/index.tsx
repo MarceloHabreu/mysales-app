@@ -85,6 +85,7 @@ export const ProductRegistration: React.FC = () => {
                 if (id) {
                     service.update(product).then(() => {
                         toast.success("Product Successfuly Updated");
+                        router.push("/list/products");
                     });
                 } else {
                     service.save(product).then((productResponse) => {
@@ -173,7 +174,7 @@ export const ProductRegistration: React.FC = () => {
                     )}
                 </div>
                 <div className="flex justify-end gap-4">
-                    <Link href="/consults/products">
+                    <Link href="/list/products">
                         <button
                             type="button"
                             className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

@@ -40,5 +40,10 @@ public class ProductController {
     public ResponseEntity<ProductRequestDTO> getProduct(@PathVariable Long id){
         return service.getById(id);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        return service.delete(id);
+    }
 }
 
