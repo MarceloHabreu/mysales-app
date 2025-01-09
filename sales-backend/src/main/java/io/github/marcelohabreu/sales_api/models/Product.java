@@ -2,6 +2,7 @@ package io.github.marcelohabreu.sales_api.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,11 +20,12 @@ public class Product {
     @Column(precision = 16, scale = 2)
     private BigDecimal price;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "registration")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate registrationDate;
+    private LocalDate registration;
 
 
     public Product(){}
@@ -76,17 +78,17 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
+    public LocalDate getRegistration() {
+        return registration;
     }
 
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setRegistration(LocalDate registration) {
+        this.registration = registration;
     }
 
     @PrePersist
     public void prePersist(){
-        setRegistrationDate(LocalDate.now());
+        setRegistration(LocalDate.now());
     }
 }
 
