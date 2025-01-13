@@ -25,7 +25,7 @@ public class Customer {
     @Column(nullable = false, length = 255)
     private String address;
 
-    @Column(length = 14)
+    @Column(length = 15)
     private String phone;
 
     @Column(nullable = false, unique = true, length = 100)

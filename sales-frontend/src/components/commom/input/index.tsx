@@ -1,43 +1,45 @@
-import { InputHTMLAttributes, ChangeEventHandler, ChangeEvent } from "react";
-import { formatReal } from "app/utils/money";
+import { InputHTMLAttributes, ChangeEvent } from "react";
+import { formatReal } from "@/app/utils/money";
+/* import { FormatUtils } from "@4us-dev/utils";
+
+const formatUtils = new FormatUtils(); */
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
-    onChange?: ChangeEventHandler<HTMLInputElement>;
     label: string;
     icon?: React.ReactNode;
     columnClasses?: string;
-    currency?: boolean;
     error?: string;
+    formatter?: (value: string) => string;
 }
 
 export const Input: React.FC<InputProps> = ({
     onChange,
     label,
-    columnClasses,
     id,
     icon,
-    currency,
     error,
     className,
+    formatter,
     ...inputProps
 }: InputProps) => {
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value;
+        const value = e.target.value;
+        const name = e.target.name;
 
-        if (value && currency) {
-            value = formatReal(value);
-        }
+        // Aplica a formatação, se existir
+        const formattedValue = formatter ? formatter(value) : value;
 
+        // Propaga o evento com o valor formatado
         if (onChange) {
-            const event = {
+            onChange({
                 ...e,
                 target: {
                     ...e.target,
-                    value,
+                    name,
+                    value: formattedValue,
                 },
-            };
-            onChange(event as ChangeEvent<HTMLInputElement>);
+            });
         }
     };
 
@@ -49,6 +51,7 @@ export const Input: React.FC<InputProps> = ({
             <div className="relative mb-4">
                 <input
                     id={id}
+                    name={id}
                     {...inputProps}
                     onChange={onInputChange}
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
@@ -64,4 +67,38 @@ export const Input: React.FC<InputProps> = ({
             )}
         </div>
     );
+};
+export const InputMoney: React.FC<InputProps> = (props: InputProps) => {
+    return <Input {...props} formatter={formatReal} />;
+};
+
+export const InputCPF: React.FC<InputProps> = (props: InputProps) => {
+    const formatCPF = (cpf: string) => cpf.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    return <Input {...props} maxLength={14} formatter={formatCPF} />;
+};
+
+export const InputPhone: React.FC<InputProps> = (props: InputProps) => {
+    const formatPhone = (phone: string) => {
+        phone = phone.replace(/\D/g, ""); // Remove tudo que não for número
+        if (phone.length <= 10) {
+            return phone.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+        }
+        return phone.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    };
+    return <Input {...props} maxLength={15} formatter={formatPhone} />;
+};
+
+export const InputDate: React.FC<InputProps> = (props: InputProps) => {
+    const formatDate = (value: string) => {
+        value = value.replace(/\D/g, ""); // Remove tudo que não for número
+        if (value.length <= 2) {
+            return value;
+        }
+        if (value.length <= 4) {
+            return value.replace(/(\d{2})(\d{2})/, "$1/$2");
+        }
+        return value.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
+    };
+
+    return <Input {...props} maxLength={10} formatter={formatDate} />;
 };
