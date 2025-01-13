@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { InputMoney } from "@/components/commom";
 
 interface FormErrors {
     sku?: string;
@@ -65,6 +66,11 @@ export const ProductRegistration: React.FC = () => {
 
     const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(e.target.value);
+    };
+
+    // Function mask the price
+    const maskPrice = (value: string) => {
+        return formatReal(value);
     };
 
     const submit = (e: React.FormEvent) => {
@@ -135,13 +141,12 @@ export const ProductRegistration: React.FC = () => {
                         placeholder="Enter the product sku"
                         error={errors.sku}
                     />
-                    <Input
+                    <InputMoney
                         id="inputPrice"
                         label="Price: *"
                         onChange={handlePriceChange}
                         value={price}
                         placeholder="Enter the product price"
-                        currency
                         maxLength={16}
                         error={errors.price}
                     />

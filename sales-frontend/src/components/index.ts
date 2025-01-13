@@ -1,3 +1,4 @@
 export { Layout } from "./layout";
 export { ProductRegistration, ProductList } from "./products";
-export { Input } from "./commom";
+import { CustomerRegistration } from "./customers";
+export { Input, InputCPF, InputMoney, InputPhone, InputDate } from "./commom";
