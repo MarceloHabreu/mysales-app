@@ -7,7 +7,7 @@ export const Sidebar: React.FC = () => {
             <nav className="space-y-5 items-center flex flex-col gap-3">
                 <MenuItem href="/" label="Home" />
                 <MenuItem href="/list/products" label="Products" />
-                <MenuItem href="/registrations/customers" label="Customers" />
+                <MenuItem href="/list/customers" label="Customers" />
                 <MenuItem href="/" label="Sales" />
                 <MenuItem href="/" label="Report" />
                 <MenuItem href="/" label="Logout" />

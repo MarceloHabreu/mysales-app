@@ -8,6 +8,9 @@ import { AxiosResponse } from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useRouter } from "next/router";
 import { useProductService } from "@/app/services";
+import AddIcon from "@mui/icons-material/Add";
+import { Input } from "@/components/common";
+import SearchIcon from "@mui/icons-material/Search";
 
 export const ProductList: React.FC = () => {
     const { data: result, error } = useSWR<AxiosResponse<Product[]>>("/api/products", (url: string) =>
@@ -32,21 +35,30 @@ export const ProductList: React.FC = () => {
     };
 
     const remove = (product: Product) => {
-        service.deleteProduct(product.id || "").then((response) => {
+        service.remove(product.id || "").then(() => {
             mutate("/api/products");
         });
     };
 
     return (
         <Layout title="Products">
-            <a href="/registrations/products">
-                <button
-                    type="button"
-                    className="mt-4 text-gray-900 bg-yellow-500 hover:bg-yellow-400 focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#F7BE38]/50 me-2 mb-4 shadow-lg transform transition-transform duration-200 ease-in-out hover:scale-105"
-                >
-                    <AddCircleOutlineIcon className="mr-1 " /> New Product
-                </button>
-            </a>
+            <form>
+                <div className="grid md:grid-cols-2 gap-6 text-zinc-400">
+                    <Input label="Name:" id="name" name="name" placeholder="Enter customer name" />
+                    <Input label="SKU:" id="sku" name="sku" placeholder="Enter product sku" />
+                </div>
+                <div className="mt-4 mb-2">
+                    <button
+                        type="button"
+                        onClick={() => router.push("/registrations/products")}
+                        className="bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        <AddIcon className="mr-1" />
+                        New
+                    </button>
+                </div>
+            </form>
+
             <TableProducts onEdit={update} onDelete={remove} products={result?.data || [""]} />
         </Layout>
     );

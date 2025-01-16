@@ -1,6 +1,6 @@
 package io.github.marcelohabreu.sales_api.controllers;
 
-import io.github.marcelohabreu.sales_api.DTO.ProductRequestDTO;
+import io.github.marcelohabreu.sales_api.DTO.ProductFormDTO;
 import io.github.marcelohabreu.sales_api.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,22 +17,22 @@ public class ProductController {
     private ProductService service;
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductRequestDTO p){
+    public ResponseEntity<?> createProduct(@RequestBody ProductFormDTO p){
         return service.save(p);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO p) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductFormDTO p) {
         return service.update(id,p);
     }
 
     @GetMapping
-    public List<ProductRequestDTO> list(){
+    public List<ProductFormDTO> list(){
         return service.listAll();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ProductRequestDTO> getProduct(@PathVariable Long id){
+    public ResponseEntity<ProductFormDTO> getProduct(@PathVariable Long id){
         return service.getById(id);
     }
 

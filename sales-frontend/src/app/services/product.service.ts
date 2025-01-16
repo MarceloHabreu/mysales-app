@@ -21,7 +21,7 @@ export const useProductService = () => {
         return response.data;
     };
 
-    const deleteProduct = async (id: string): Promise<void> => {
+    const remove = async (id: string): Promise<void> => {
         const url: string = `${resourceURL}/${id}`;
         await httpClient.delete(url);
     };
@@ -30,6 +30,6 @@ export const useProductService = () => {
         save,
         update,
         loadProduct,
-        deleteProduct,
+        remove,
     };
 };

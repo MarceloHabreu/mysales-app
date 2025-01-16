@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { InputMoney } from "@/components/commom";
+import { InputMoney } from "@/components/common";
 
 interface FormErrors {
     sku?: string;
@@ -44,7 +44,7 @@ export const ProductRegistration: React.FC = () => {
             service.loadProduct(queryId).then((productFound) => {
                 setId(productFound.id || "");
                 setSku(productFound.sku);
-                setRegistration(productFound.registration || "");
+                setRegistration(productFound.registrationDate || "");
                 setName(productFound.name);
                 setDescription(productFound.description || "");
                 setPrice(formatReal(`${productFound.price}`));
@@ -66,11 +66,6 @@ export const ProductRegistration: React.FC = () => {
 
     const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(e.target.value);
-    };
-
-    // Function mask the price
-    const maskPrice = (value: string) => {
-        return formatReal(value);
     };
 
     const submit = (e: React.FormEvent) => {
@@ -96,7 +91,7 @@ export const ProductRegistration: React.FC = () => {
                 } else {
                     service.save(product).then((productResponse) => {
                         setId(productResponse.id || "");
-                        setRegistration(productResponse.registration || "");
+                        setRegistration(productResponse.registrationDate || "");
                         toast.success("Product Successfuly Saved");
                     });
                 }

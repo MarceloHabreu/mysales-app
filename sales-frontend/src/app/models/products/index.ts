@@ -4,5 +4,5 @@ export interface Product {
     description?: string;
     price: number;
     sku: string;
-    registration?: string;
+    registrationDate?: string;
 }

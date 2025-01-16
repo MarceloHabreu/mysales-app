@@ -1,7 +1,9 @@
 import { Customer } from "@/app/models/customers";
-import { Input, InputCPF, InputDate, InputPhone } from "@/components/commom";
+import { Input, InputCPF, InputDate, InputPhone } from "@/components/common";
 import { useFormik } from "formik";
+import Link from "next/link";
 import * as Yup from "yup";
+import DoneIcon from "@mui/icons-material/Done";
 
 interface CustomerFormProps {
     customer: Customer;
@@ -25,7 +27,7 @@ const validationScheme = Yup.object().shape({
         .trim()
         .required()
         .matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, "Invalid Date")
-        .length(10, "Invalid BirthDate"),
+        .length(10, "Invalid Date"),
     email: Yup.string().trim().required().email("Invalid Email"),
     address: Yup.string().trim().required(),
     phone: Yup.string().trim().required().length(15, "Invalid Phone"),
@@ -126,14 +128,24 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({ customer, onSubmit }
                     error={formik.errors.phone}
                 />
             </div>
-            <button
-                type="submit"
-                className={`${
-                    formik.values.id ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"
-                } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
-            >
-                {formik.values.id ? "Update" : "Save"}
-            </button>
+            <div className="flex justify-end gap-4">
+                <Link href="/list/customers">
+                    <button
+                        type="button"
+                        className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        Back
+                    </button>
+                </Link>
+                <button
+                    type="submit"
+                    className={`${
+                        formik.values.id ? "bg-green-600 hover:bg-green-700" : "bg-blue-500 hover:bg-blue-600"
+                    }  text-white flex items-center justify-center font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+                >
+                    {formik.values.id ? "Update" : "Save"}
+                </button>
+            </div>
         </form>
     );
 };

@@ -1,6 +1,6 @@
 package io.github.marcelohabreu.sales_api.services;
 
-import io.github.marcelohabreu.sales_api.DTO.ProductRequestDTO;
+import io.github.marcelohabreu.sales_api.DTO.ProductFormDTO;
 import io.github.marcelohabreu.sales_api.models.Product;
 import io.github.marcelohabreu.sales_api.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +19,14 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public ResponseEntity<?> save(ProductRequestDTO p){
-        Product product = new Product();
-        product.setSku(p.sku());
-        product.setPrice(p.price());
-        product.setName(p.name());
-        product.setDescription(p.description());
-        product.setRegistration(p.registration());
-        return new ResponseEntity<>(repository.save(product), HttpStatus.CREATED);
+    public ResponseEntity<?> save(ProductFormDTO p){
+        System.out.println("Recebido: " + p);
+        Product newProduct = p.toModel();
+        repository.save(newProduct);
+        return new ResponseEntity<>(ProductFormDTO.fromModel(newProduct), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> update(Long id, ProductRequestDTO p){
+    public ResponseEntity<?> update(Long id, ProductFormDTO p){
         Optional<Product> productOptional = repository.findById(id);
 
         if (productOptional.isPresent()){
@@ -47,31 +44,31 @@ public class ProductService {
         }
     }
 
-    public List<ProductRequestDTO> listAll() {
+    public List<ProductFormDTO> listAll() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
-                .map(product -> new ProductRequestDTO(
+                .map(product -> new ProductFormDTO(
                         product.getId(),
                         product.getSku(),
                         product.getName(),
                         product.getDescription(),
                         product.getPrice(),
-                        product.getRegistration()
+                        product.getRegistrationDate()
                 ))
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<ProductRequestDTO> getById(Long id) {
+    public ResponseEntity<ProductFormDTO> getById(Long id) {
         Optional<Product> productOptional = repository.findById(id);
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            ProductRequestDTO productDTO = new ProductRequestDTO(
+            ProductFormDTO productDTO = new ProductFormDTO(
                     product.getId(),
                     product.getSku(),
                     product.getName(),
                     product.getDescription(),
                     product.getPrice(),
-                    product.getRegistration()
+                    product.getRegistrationDate()
             );
             return ResponseEntity.ok(productDTO);
         }

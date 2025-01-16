@@ -22,21 +22,22 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "registration")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate registration;
+    private LocalDate registrationDate;
 
+    public Product() {
+    }
 
-    public Product(){}
-
-    public Product(Long id, String sku, String name, BigDecimal price, String description) {
+    public Product(Long id, String sku, String name, BigDecimal price, String description, LocalDate registrationDate) {
         this.id = id;
         this.sku = sku;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.registrationDate = registrationDate;
     }
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -77,17 +78,16 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDate getRegistration() {
-        return registration;
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegistration(LocalDate registration) {
-        this.registration = registration;
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     @PrePersist
     public void prePersist(){
-        setRegistration(LocalDate.now());
+        setRegistrationDate(LocalDate.now());
     }
 }
-
