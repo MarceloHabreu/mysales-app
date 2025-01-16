@@ -1,12 +1,12 @@
 package io.github.marcelohabreu.sales_api.controllers;
 
-import io.github.marcelohabreu.sales_api.DTO.CustomerRequestDTO;
+import io.github.marcelohabreu.sales_api.DTO.CustomerFormDTO;
 import io.github.marcelohabreu.sales_api.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -17,22 +17,25 @@ public class CustomerController {
     CustomerService service;
 
     @GetMapping
-    public List<CustomerRequestDTO> list(){
-        return service.listAllCustomers();
+    public Page<CustomerFormDTO> list(
+            @RequestParam(value = "name", required = false, defaultValue = "") String name,
+            @RequestParam(value = "cpf", required = false, defaultValue = "") String cpf,
+            Pageable pageable){
+        return service.listAllCustomers(name,cpf,pageable);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CustomerRequestDTO> getCustomer(@PathVariable Long id){
+    public ResponseEntity<CustomerFormDTO> getCustomer(@PathVariable Long id){
         return service.getByIdCustomer(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody CustomerRequestDTO c){
+    public ResponseEntity<?> create(@RequestBody CustomerFormDTO c){
         return service.saveCustomer(c);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CustomerRequestDTO c){
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CustomerFormDTO c){
         return service.updateCustomer(id,c);
     }
 

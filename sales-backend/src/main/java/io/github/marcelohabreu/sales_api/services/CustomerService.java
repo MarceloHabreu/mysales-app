@@ -1,16 +1,16 @@
 package io.github.marcelohabreu.sales_api.services;
 
-import io.github.marcelohabreu.sales_api.DTO.CustomerRequestDTO;
+import io.github.marcelohabreu.sales_api.DTO.CustomerFormDTO;
 import io.github.marcelohabreu.sales_api.models.Customer;
 import io.github.marcelohabreu.sales_api.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -18,17 +18,17 @@ public class CustomerService {
     @Autowired
     CustomerRepository repository;
 
-    public ResponseEntity<?> saveCustomer(CustomerRequestDTO c) {
+    public ResponseEntity<?> saveCustomer(CustomerFormDTO c) {
         Customer newCustomer = c.toModel();
         Optional<Customer> emailExisting = repository.findByEmail(newCustomer.getEmail());
         if (emailExisting.isPresent()){
-            return ResponseEntity.badRequest().body("Email already exist!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exist!");
         }
         repository.save(newCustomer);
-        return new ResponseEntity<>(CustomerRequestDTO.fromModel(newCustomer), HttpStatus.CREATED);
+        return new ResponseEntity<>(CustomerFormDTO.fromModel(newCustomer), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Void> updateCustomer(Long id, CustomerRequestDTO c) {
+    public ResponseEntity<Void> updateCustomer(Long id, CustomerFormDTO c) {
         Optional<Customer> customerOptional = repository.findById(id);
         if (customerOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -40,9 +40,9 @@ public class CustomerService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<CustomerRequestDTO> getByIdCustomer(Long id) {
+    public ResponseEntity<CustomerFormDTO> getByIdCustomer(Long id) {
         return repository.findById(id)
-                .map(CustomerRequestDTO::fromModel)
+                .map(CustomerFormDTO::fromModel)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -56,10 +56,11 @@ public class CustomerService {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public List<CustomerRequestDTO> listAllCustomers(){
-        return repository.findAll()
-                .stream()
-                .map(CustomerRequestDTO::fromModel)
-                .collect(Collectors.toList());
+    public Page<CustomerFormDTO> listAllCustomers(
+            String name,
+            String cpf,
+            Pageable pageable){
+        return repository.findByNameOrCpf("%" + name + "%", "%" + cpf + "%",pageable)
+                .map(CustomerFormDTO::fromModel);
     }
 }

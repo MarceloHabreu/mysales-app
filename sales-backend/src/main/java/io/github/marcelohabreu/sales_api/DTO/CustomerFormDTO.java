@@ -5,15 +5,15 @@ import io.github.marcelohabreu.sales_api.models.Customer;
 
 import java.time.LocalDate;
 
-public record CustomerRequestDTO(Long id,
-                                 @JsonFormat(pattern = "dd/MM/yyyy")
+public record CustomerFormDTO(Long id,
+                              @JsonFormat(pattern = "dd/MM/yyyy")
                                  LocalDate birthDate,
-                                 String cpf,
-                                 String name,
-                                 String address,
-                                 String phone,
-                                 String email,
-                                 @JsonFormat(pattern = "dd/MM/yyyy")
+                              String cpf,
+                              String name,
+                              String address,
+                              String phone,
+                              String email,
+                              @JsonFormat(pattern = "dd/MM/yyyy")
                                  LocalDate registrationDate) {
 
     public Customer toModel() {
@@ -21,8 +21,8 @@ public record CustomerRequestDTO(Long id,
                 address, phone, email, registrationDate);
     }
 
-    public static CustomerRequestDTO fromModel(Customer c) {
-        return new CustomerRequestDTO(c.getId(), c.getBirthDate(),
+    public static CustomerFormDTO fromModel(Customer c) {
+        return new CustomerFormDTO(c.getId(), c.getBirthDate(),
                 c.getCpf(), c.getName(), c.getAddress(),
                 c.getPhone(), c.getEmail(), c.getRegistrationDate());
     }

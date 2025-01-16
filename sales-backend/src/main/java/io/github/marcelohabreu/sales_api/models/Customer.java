@@ -3,6 +3,7 @@ package io.github.marcelohabreu.sales_api.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -34,7 +35,9 @@ public class Customer {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate registrationDate;
 
-    public Customer() {
+    public Customer(){}
+
+    public Customer(Long id, LocalDate registrationDate, String name, String sku, BigDecimal price, String description) {
     }
 
     public Customer(Long id, LocalDate birthDate, String cpf, String name, String address, String phone, String email, LocalDate registrationDate) {
