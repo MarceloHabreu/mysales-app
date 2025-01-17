@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -19,72 +18,47 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public ResponseEntity<?> save(ProductFormDTO p){
-        System.out.println("Recebido: " + p);
+    public ResponseEntity<?> saveProduct(ProductFormDTO p){
         Product newProduct = p.toModel();
         repository.save(newProduct);
         return new ResponseEntity<>(ProductFormDTO.fromModel(newProduct), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> update(Long id, ProductFormDTO p){
+    public ResponseEntity<Void> updateProduct(Long id, ProductFormDTO p){
         Optional<Product> productOptional = repository.findById(id);
 
-        if (productOptional.isPresent()){
-            Product existingProduct = productOptional.get();
-            existingProduct.setName(p.name());
-            existingProduct.setDescription(p.description());
-            existingProduct.setSku(p.sku());
-            existingProduct.setPrice(p.price());
-
-            repository.save(existingProduct);
-            return ResponseEntity.ok().build();
-        }
-        else {
+        if (productOptional.isEmpty()){
             return ResponseEntity.notFound().build();
         }
+        Product existingProduct = p.toModel();
+        existingProduct.setId(id);
+        existingProduct.setRegistrationDate(productOptional.get().getRegistrationDate());
+        repository.save(existingProduct);
+        return ResponseEntity.noContent().build();
     }
 
-    public List<ProductFormDTO> listAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
-                .map(product -> new ProductFormDTO(
-                        product.getId(),
-                        product.getSku(),
-                        product.getName(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        product.getRegistrationDate()
-                ))
-                .collect(Collectors.toList());
+    public List<ProductFormDTO> listAllProducts(String name, String sku) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        return repository.findByNameAndSku("%" + name + "%", "%" + sku + "%", sort)
+                .stream()
+                .map(ProductFormDTO::fromModel)
+                .toList();
     }
 
-    public ResponseEntity<ProductFormDTO> getById(Long id) {
-        Optional<Product> productOptional = repository.findById(id);
-
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            ProductFormDTO productDTO = new ProductFormDTO(
-                    product.getId(),
-                    product.getSku(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getRegistrationDate()
-            );
-            return ResponseEntity.ok(productDTO);
-        }
-
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ProductFormDTO> getByIdProduct(Long id) {
+        return repository.findById(id)
+                .map(ProductFormDTO::fromModel)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<?> delete(Long id){
-        Optional<Product> productOptional = repository.findById(id);
-        if (productOptional.isPresent()){
-            Product productExistent = productOptional.get();
-            repository.delete(productExistent);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Object> deleteProduct(Long id){
+        return repository.findById(id)
+                .map(product -> {
+                    repository.delete(product);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 

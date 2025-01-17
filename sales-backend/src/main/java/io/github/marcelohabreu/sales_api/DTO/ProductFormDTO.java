@@ -15,6 +15,7 @@ public record ProductFormDTO(
         @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate registrationDate) {
 
+
     public Product toModel() {
         return new Product(
                 id,
@@ -27,8 +28,8 @@ public record ProductFormDTO(
     }
 
     public static ProductFormDTO fromModel(Product p) {
-        return new ProductFormDTO(p.getId(), p.getSku(),
-                p.getDescription(), p.getName(), p.getPrice(), p.getRegistrationDate());
+        return new ProductFormDTO(p.getId(), p.getSku(), p.getName(),p.getDescription(),p.getPrice(),
+                 p.getRegistrationDate());
     }
 
 }
