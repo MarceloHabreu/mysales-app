@@ -5,7 +5,9 @@ import io.github.marcelohabreu.sales_api.models.Customer;
 import io.github.marcelohabreu.sales_api.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -56,11 +58,11 @@ public class CustomerService {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public Page<CustomerFormDTO> listAllCustomers(
-            String name,
-            String cpf,
-            Pageable pageable){
-        return repository.findByNameOrCpf("%" + name + "%", "%" + cpf + "%",pageable)
+    public Page<CustomerFormDTO> listAllCustomers(String name, String cpf, Pageable pageable) {
+        // Criando o PageRequest com a ordenação desejada (por id ascendente)
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "id"));
+
+        return repository.findByNameOrCpf("%" + name + "%", "%" + cpf + "%", sortedPageable)
                 .map(CustomerFormDTO::fromModel);
     }
 }

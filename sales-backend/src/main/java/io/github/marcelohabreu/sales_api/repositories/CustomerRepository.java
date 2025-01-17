@@ -3,6 +3,7 @@ package io.github.marcelohabreu.sales_api.repositories;
 import io.github.marcelohabreu.sales_api.models.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,5 +17,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Page<Customer> findByNameOrCpf(
             @Param("name") String name,
             @Param("cpf") String cpf,
-            Pageable pageable);
+            Pageable pageable
+    );
 }
