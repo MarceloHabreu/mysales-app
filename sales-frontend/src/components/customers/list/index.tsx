@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 interface ConsultCustomersForm {
     name?: string;
@@ -104,15 +105,15 @@ export const CustomerList: React.FC = () => {
             <div className="flex space-x-2">
                 <button
                     onClick={(e) => router.push(url)}
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
+                    className="bg-green-500 hover:bg-green-600 text-white text-sm font-medium py-1 px-3 rounded"
                 >
-                    Edit
+                    <FiEdit className="inline mr-1 text-base" /> Edit
                 </button>
                 <button
                     onClick={() => onDeleteClick(record)}
-                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
+                    className="bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-1 px-3 rounded"
                 >
-                    Delete
+                    <FiTrash2 className="inline mr-1 text-base" /> Delete
                 </button>
             </div>
         );
@@ -120,7 +121,7 @@ export const CustomerList: React.FC = () => {
 
     return (
         <Layout title="Customers">
-            <form onSubmit={formikSubmit}>
+            <form onSubmit={formikSubmit} className="mb-6">
                 <div className="grid md:grid-cols-2 gap-6 text-zinc-400">
                     <Input
                         label="Name:"
@@ -160,7 +161,7 @@ export const CustomerList: React.FC = () => {
 
             <div className="shadow-sm">
                 <DataTable
-                    className="hover:bg-zinc-200 rounded-lg"
+                    className="hover:bg-gray-100 rounded-lg"
                     selectionMode="single"
                     value={customers.content}
                     totalRecords={customers.totalElements}
@@ -169,12 +170,49 @@ export const CustomerList: React.FC = () => {
                     first={customers.first}
                     rows={customers.size}
                     onPage={handlePage}
+                    paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                    currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                    rowClassName={() => "border-b border-gray-200"}
                 >
-                    <Column field="id" header="Code" />
-                    <Column field="name" header="Name" />
-                    <Column field="cpf" header="CPF" />
-                    <Column field="email" header="Email" />
-                    <Column body={actionTemplate} />
+                    <Column
+                        field="id"
+                        header="Code"
+                        headerStyle={{
+                            backgroundColor: "#27272a",
+                            color: "white",
+                        }}
+                    />
+                    <Column
+                        field="name"
+                        header="Name"
+                        headerStyle={{
+                            backgroundColor: "#27272a",
+                            color: "white",
+                        }}
+                    />
+                    <Column
+                        field="cpf"
+                        header="CPF"
+                        headerStyle={{
+                            backgroundColor: "#27272a",
+                            color: "white",
+                        }}
+                    />
+                    <Column
+                        field="email"
+                        header="Email"
+                        headerStyle={{
+                            backgroundColor: "#27272a",
+                            color: "white",
+                        }}
+                    />
+                    <Column
+                        body={actionTemplate}
+                        headerStyle={{
+                            backgroundColor: "#27272a",
+                            color: "white",
+                        }}
+                    />
                 </DataTable>
             </div>
         </Layout>

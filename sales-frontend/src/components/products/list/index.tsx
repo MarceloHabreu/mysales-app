@@ -10,24 +10,24 @@ import { useRouter } from "next/router";
 import { useProductService } from "@/app/services";
 import AddIcon from "@mui/icons-material/Add";
 import { Input } from "@/components/common";
-import SearchIcon from "@mui/icons-material/Search";
+import { useCallback, useState } from "react";
+import { debounce } from "lodash";
 
 export const ProductList: React.FC = () => {
-    const { data: result, error } = useSWR<AxiosResponse<Product[]>>("/api/products", (url: string) =>
-        httpClient.get(url)
+    const [filters, setFilters] = useState({ name: "", sku: "" });
+    const { data: result, error } = useSWR<AxiosResponse<Product[]>>(
+        `/api/products?name=${filters.name}&sku=${filters.sku}`,
+        (url: string) => httpClient.get(url)
     );
+
+    console.log(result?.data);
+
+    const handleInputChange = (name: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [name]: value }));
+    };
 
     const service = useProductService();
     const router = useRouter();
-
-    if (!result) {
-        return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-100 dark:bg-gray-900">
-                <ClipLoader color="#F7BE38" size={50} />
-                <p className="mt-4 text-lg font-semibold text-gray-800 dark:text-gray-200">Carregando...</p>
-            </div>
-        );
-    }
 
     const update = async (product: Product) => {
         const url = `/registrations/products?id=${product.id}`;
@@ -36,18 +36,32 @@ export const ProductList: React.FC = () => {
 
     const remove = (product: Product) => {
         service.remove(product.id || "").then(() => {
-            mutate("/api/products");
+            mutate(`/api/products?name=${filters.name}&sku=${filters.sku}`);
         });
     };
 
     return (
         <Layout title="Products">
-            <form>
+            <form onSubmit={(e) => e.preventDefault()} className="mb-6">
                 <div className="grid md:grid-cols-2 gap-6 text-zinc-400">
-                    <Input label="Name:" id="name" name="name" placeholder="Enter customer name" />
-                    <Input label="SKU:" id="sku" name="sku" placeholder="Enter product sku" />
+                    <Input
+                        label="Name:"
+                        id="name"
+                        name="name"
+                        value={filters.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        placeholder="Enter customer name"
+                    />
+                    <Input
+                        label="SKU:"
+                        id="sku"
+                        name="sku"
+                        value={filters.sku}
+                        onChange={(e) => handleInputChange("sku", e.target.value)}
+                        placeholder="Enter product sku"
+                    />
                 </div>
-                <div className="mt-4 mb-2">
+                <div className="mt-3 mb-2">
                     <button
                         type="button"
                         onClick={() => router.push("/registrations/products")}
@@ -59,7 +73,7 @@ export const ProductList: React.FC = () => {
                 </div>
             </form>
 
-            <TableProducts onEdit={update} onDelete={remove} products={result?.data || [""]} />
+            <TableProducts onEdit={update} onDelete={remove} products={result?.data || []} />
         </Layout>
     );
 };
