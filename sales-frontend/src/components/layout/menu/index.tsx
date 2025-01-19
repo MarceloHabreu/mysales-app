@@ -8,7 +8,7 @@ export const Sidebar: React.FC = () => {
                 <MenuItem href="/" label="Home" />
                 <MenuItem href="/list/products" label="Products" />
                 <MenuItem href="/list/customers" label="Customers" />
-                <MenuItem href="/" label="Sales" />
+                <MenuItem href="/sales/new-sale" label="Sales" />
                 <MenuItem href="/" label="Report" />
                 <MenuItem href="/" label="Logout" />
             </nav>
