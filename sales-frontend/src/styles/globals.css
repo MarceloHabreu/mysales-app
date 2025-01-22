@@ -10,3 +10,52 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estiliza o input do AutoComplete */
+.p-autocomplete-custom .p-inputtext {
+    padding: 0.75rem !important; /* Define padding maior */
+    border-radius: 0.375rem; /* Define bordas arredondadas */
+    border: 2px solid #e5e7eb; /* Define a borda inicial */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Estilo ao focar o input */
+.p-autocomplete-custom .p-inputtext:focus {
+    border-color: #6366f1 !important; /* Altera a borda ao focar */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5) !important; /* Adiciona foco visível */
+}
+
+/* Estiliza o dropdown */
+.custom-panel {
+    border-radius: 0.375rem; /* Define bordas arredondadas */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
+    padding: 0.5rem; /* Define padding interno */
+}
+
+/* Estilo das opções no dropdown */
+.custom-panel .p-autocomplete-items .p-autocomplete-item {
+    padding: 0.5rem 1rem; /* Aumenta o padding das opções */
+    border-radius: 0.25rem; /* Adiciona bordas arredondadas nas opções */
+    transition: background-color 0.2s ease;
+}
+
+/* Hover nas opções */
+.custom-panel .p-autocomplete-items .p-autocomplete-item:hover {
+    background-color: #e0e7ff !important; /* Cor de hover */
+    color: #3730a3 !important; /* Cor do texto no hover */
+}
+
+/* Border de items */
+.border-strong {
+    border: 2px solid #7a7a7a; /* Borda mais grossa e escura */
+}
+
+/* Message Datatable */
+.empty-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 16px;
+    color: gray;
+}
