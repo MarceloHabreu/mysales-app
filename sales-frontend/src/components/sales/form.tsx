@@ -24,6 +24,8 @@ const formatterMoney = new Intl.NumberFormat("pt-BR", {
 
 interface SalesFormProps {
     onSubmit: (sale: Sale) => void;
+    saleCompleted: boolean;
+    onNewSale: () => void;
 }
 
 const formSchema: Sale = {
@@ -33,8 +35,8 @@ const formSchema: Sale = {
     paymentMethod: "",
 };
 
-export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit }) => {
-    const paymentMethods: String[] = ["Cash", "Card"];
+export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, onNewSale }) => {
+    const paymentMethods: String[] = ["CASH", "CARD"];
     const customerService = useCustomerService();
     const productService = useProductService();
     const [listProducts, setListProducts] = useState<Product[]>([]);
@@ -167,6 +169,13 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit }) => {
 
     const disableAddProductButton = () => {
         return !product || !qtyProduct;
+    };
+
+    const makeNewSale = () => {
+        onNewSale();
+        formik.resetForm();
+        formik.setFieldValue("items", []);
+        formik.setFieldTouched("items", false);
     };
 
     return (
@@ -389,15 +398,27 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit }) => {
                         </div>
                     </div>
 
-                    {/* Finish Button */}
-                    <div className="mt-6">
-                        <button
-                            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-3 px-4 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                            type="submit"
-                        >
-                            Finish
-                        </button>
-                    </div>
+                    {!saleCompleted && (
+                        <div className="mt-6">
+                            <button
+                                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-3 px-4 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                                type="submit"
+                            >
+                                Finish
+                            </button>
+                        </div>
+                    )}
+                    {saleCompleted && (
+                        <div className="mt-6">
+                            <button
+                                onClick={makeNewSale}
+                                className="w-full bg-green-500 hover:bg-green-600 text-white text-sm font-medium py-3 px-4 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                                type="button"
+                            >
+                                New Sale
+                            </button>
+                        </div>
+                    )}
 
                     {/* Dialog */}
                     <Dialog
