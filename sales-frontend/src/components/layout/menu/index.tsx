@@ -9,7 +9,7 @@ export const Sidebar: React.FC = () => {
                 <MenuItem href="/list/products" label="Products" />
                 <MenuItem href="/list/customers" label="Customers" />
                 <MenuItem href="/sales/new-sale" label="Sales" />
-                <MenuItem href="/" label="Report" />
+                <MenuItem href="/sales/report-sales" label="Report" />
                 <MenuItem href="/" label="Logout" />
             </nav>
         </aside>

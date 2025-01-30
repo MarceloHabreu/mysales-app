@@ -1,9 +1,9 @@
 package io.github.marcelohabreu.sales_api.models;
 
-import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,6 +27,14 @@ public class Sale {
 
     @Column(nullable = false, precision = 16, scale = 2)
     private BigDecimal total;
+
+    @Column(name = "date_sale")
+    private LocalDateTime dateRegister;
+
+    @PrePersist
+    public void prePersist(){
+        setDateRegister(LocalDateTime.now());
+    }
 
     public Sale() {
     }
@@ -77,5 +85,13 @@ public class Sale {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public LocalDateTime getDateRegister() {
+        return dateRegister;
+    }
+
+    public void setDateRegister(LocalDateTime dateRegister) {
+        this.dateRegister = dateRegister;
     }
 }

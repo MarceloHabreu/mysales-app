@@ -2,7 +2,7 @@ import { Customer } from "../customers";
 import { Product } from "../products";
 
 export interface Sale {
-    customer?: Customer;
+    customer?: Customer | null;
     items?: Array<ItemSale>;
     paymentMethod?: string;
     total: number;

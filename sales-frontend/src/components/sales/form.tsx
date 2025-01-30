@@ -1,4 +1,3 @@
-import { Page } from "@/app/models/common/page";
 import { Customer } from "@/app/models/customers";
 import { Product } from "@/app/models/products";
 import { ItemSale, Sale } from "@/app/models/sales";
@@ -43,7 +42,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const [listFilteredProducts, setListFilteredProducts] = useState<Product[]>([]);
     const [listCustomers, setListCustomers] = useState<Customer[]>([]);
     const [qtyProduct, setQtyProduct] = useState<number>(0);
-    const [product, setProduct] = useState<Product>();
+    const [product, setProduct] = useState<Product | null>();
     const [message, setMessage] = useState<string>("");
     const [codeProduct, setCodeProduct] = useState<string>("");
 
@@ -72,7 +71,6 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
                 setListCustomers(response.content || []);
             })
             .catch((error) => {
-                console.error("Erro ao buscar clientes:", error);
                 setListCustomers([]); // Se ocorrer erro, limpar sugestões
             });
     };
@@ -241,7 +239,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
                             <FloatLabel>
                                 <InputText
                                     id="qtyProduct"
-                                    value={qtyProduct}
+                                    value={qtyProduct.toString()}
                                     onChange={(e) => setQtyProduct(parseInt(e.target.value))}
                                     className="w-full p-3 border rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                                 />
@@ -381,7 +379,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
                             </label>
                             <InputText
                                 disabled
-                                value={formik.values.items?.length}
+                                value={formik.values.items?.length.toString() || ""}
                                 className="w-full p-3 border-strong rounded-md"
                             />
                         </div>

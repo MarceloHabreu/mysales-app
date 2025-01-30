@@ -10,6 +10,8 @@ export const Sales: React.FC = () => {
     const [saleCompleted, setSaleCompleted] = useState<boolean>(false);
 
     const handleSubmit = (sale: Sale) => {
+        console.log(sale);
+
         service
             .makingSale(sale)
             .then(() => {
