@@ -18,7 +18,7 @@ join customer as c on c.id = s.id_customer
 where 1=1
 and (s.id_customer = $P{ID_CUSTOMER} or $P{ID_CUSTOMER} is null)
 and date(s.date_sale) between date($P{START_DATE}) and date($P{END_DATE})
-order by c.name, s.date_sale asc]]>
+order by  s.date_sale asc]]>
 	</queryString>
 	<field name="code" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="code"/>

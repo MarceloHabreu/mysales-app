@@ -13,12 +13,10 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Service
 public class ReportSalesService {
 
-    private static final Logger logger = Logger.getLogger(ReportSalesService.class.getName());
 
     @Value("classpath:reports/sales-report.jrxml")
     private Resource reportSalesSource;
@@ -30,8 +28,7 @@ public class ReportSalesService {
     private DataSource dataSource;
 
     public byte[] generateReport(Long idCustomer, Date startDate, Date endDate) throws RuntimeException {
-        // Log das datas
-        logger.info("Generating report with START_DATE: " + startDate + " and END_DATE: " + endDate + ",User: " + idCustomer);
+
         // try with resource
         try (
                 Connection connection = dataSource.getConnection();
