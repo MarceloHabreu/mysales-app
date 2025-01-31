@@ -17,6 +17,7 @@
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.9",
         "brazilian-values": "^0.13.0",
+        "chart.js": "^4.4.7",
         "formik": "^2.4.6",
         "lodash": "^4.17.21",
         "next": "15.1.3",
