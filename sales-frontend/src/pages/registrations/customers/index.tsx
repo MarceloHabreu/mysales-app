@@ -1,2 +1,10 @@
 import { CustomerRegistration } from "@/components/customers";
-export default CustomerRegistration;
+import { AuthenticatedRoute } from "components";
+
+export default function () {
+    return (
+        <AuthenticatedRoute>
+            <CustomerRegistration />
+        </AuthenticatedRoute>
+    );
+}

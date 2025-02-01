@@ -5,3 +5,4 @@ export { Sales } from "./sales";
 export { Input, InputCPF, InputMoney, InputPhone, InputDate } from "./common";
 export { ReportSales } from "./reports";
 export { Dashboard } from "./dashboard";
+export { AuthenticatedRoute } from "./authenticatedRoute";

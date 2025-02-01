@@ -1,2 +1,10 @@
 import { ProductRegistration } from "components";
-export default ProductRegistration;
+import { AuthenticatedRoute } from "components";
+
+export default function () {
+    return (
+        <AuthenticatedRoute>
+            <ProductRegistration />
+        </AuthenticatedRoute>
+    );
+}

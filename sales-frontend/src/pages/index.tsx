@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Dashboard, Layout } from "components";
+import { AuthenticatedRoute, Dashboard, Layout } from "components";
 import { getDashboardData } from "@/app/services";
 import { DashboardData } from "@/app/models/dashboard";
 
@@ -9,7 +9,7 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = (props: HomeProps) => {
     return (
-        <div>
+        <AuthenticatedRoute>
             <Head>
                 <title>Sales-App</title>
             </Head>
@@ -23,7 +23,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
                     />
                 </Layout>
             </div>
-        </div>
+        </AuthenticatedRoute>
     );
 };
 

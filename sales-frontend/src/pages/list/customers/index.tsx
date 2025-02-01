@@ -1,2 +1,10 @@
 import { CustomerList } from "components";
-export default CustomerList;
+import { AuthenticatedRoute } from "components";
+
+export default function () {
+    return (
+        <AuthenticatedRoute>
+            <CustomerList />
+        </AuthenticatedRoute>
+    );
+}

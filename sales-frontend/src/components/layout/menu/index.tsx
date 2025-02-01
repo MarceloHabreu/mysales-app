@@ -1,3 +1,5 @@
+import { signOut } from "next-auth/react";
+
 export const Sidebar: React.FC = () => {
     return (
         <aside className="w-72 bg-zinc-950 p-6 ">
@@ -10,19 +12,20 @@ export const Sidebar: React.FC = () => {
                 <MenuItem href="/list/customers" label="Customers" />
                 <MenuItem href="/sales/new-sale" label="Sales" />
                 <MenuItem href="/sales/report-sales" label="Report" />
-                <MenuItem href="/" label="Logout" />
+                <MenuItem onclick={() => signOut()} href="#" label="Logout" />
             </nav>
         </aside>
     );
 };
 
 interface MenuItemsProps {
-    href: string;
+    href?: string;
     label: string;
+    onclick?: () => void;
 }
 const MenuItem: React.FC<MenuItemsProps> = (props: MenuItemsProps) => {
     return (
-        <a href={props.href} className="flex gap-3 text-2xl text-zinc-400 hover:text-zinc-100">
+        <a href={props.href} onClick={props.onclick} className="flex gap-3 text-2xl text-zinc-400 hover:text-zinc-100">
             <span className="icon"></span> {props.label}
         </a>
     );

@@ -63,7 +63,7 @@ public class Dashboard {
     public void populateMissingMonths() {
 
         // Taking the current month (maximum month)
-        Integer maximumMonth = getSalesByMonth()
+        int maximumMonth = getSalesByMonth()
                 .stream()
                 .mapToInt(SaleByMonth::getMonth)
                 .max()
