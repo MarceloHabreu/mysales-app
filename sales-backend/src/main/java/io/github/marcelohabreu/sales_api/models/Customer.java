@@ -32,6 +32,8 @@ public class Customer {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    private String userEmail;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate registrationDate;
 
@@ -40,7 +42,7 @@ public class Customer {
     public Customer(Long id, LocalDate registrationDate, String name, String sku, BigDecimal price, String description) {
     }
 
-    public Customer(Long id, LocalDate birthDate, String cpf, String name, String address, String phone, String email, LocalDate registrationDate) {
+    public Customer(Long id, LocalDate birthDate, String cpf, String name, String address, String phone, String email, LocalDate registrationDate, String userEmail) {
         this.id = id;
         this.birthDate = birthDate;
         this.cpf = cpf;
@@ -49,6 +51,7 @@ public class Customer {
         this.phone = phone;
         this.email = email;
         this.registrationDate = registrationDate;
+        this.userEmail = userEmail;
     }
 
     // Getters e setters
@@ -114,6 +117,14 @@ public class Customer {
 
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     @PrePersist

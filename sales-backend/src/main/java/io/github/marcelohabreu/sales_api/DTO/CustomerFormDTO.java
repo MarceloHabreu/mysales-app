@@ -14,16 +14,18 @@ public record CustomerFormDTO(Long id,
                               String phone,
                               String email,
                               @JsonFormat(pattern = "dd/MM/yyyy")
-                                 LocalDate registrationDate) {
+                                 LocalDate registrationDate,
+                              String userEmail
+                              ) {
 
     public Customer toModel() {
         return new Customer(id, birthDate, cpf, name,
-                address, phone, email, registrationDate);
+                address, phone, email, registrationDate, userEmail);
     }
 
     public static CustomerFormDTO fromModel(Customer c) {
         return new CustomerFormDTO(c.getId(), c.getBirthDate(),
                 c.getCpf(), c.getName(), c.getAddress(),
-                c.getPhone(), c.getEmail(), c.getRegistrationDate());
+                c.getPhone(), c.getEmail(), c.getRegistrationDate(), c.getUserEmail());
     }
 }

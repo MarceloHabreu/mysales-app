@@ -5,4 +5,5 @@ export interface Product {
     price: number;
     sku: string;
     registrationDate?: string;
+    userEmail?: string;
 }

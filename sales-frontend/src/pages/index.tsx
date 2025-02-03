@@ -2,12 +2,22 @@ import Head from "next/head";
 import { AuthenticatedRoute, Dashboard, Layout } from "components";
 import { getDashboardData } from "@/app/services";
 import { DashboardData } from "@/app/models/dashboard";
+import { useUser } from "@/context/UserContext";
+import { useEffect, useState } from "react";
 
-interface HomeProps {
-    dashboard: DashboardData;
-}
+const Home: React.FC = () => {
+    const { userEmail } = useUser();
+    const [dashboard, setDashboard] = useState<DashboardData | null>(null);
 
-const Home: React.FC<HomeProps> = (props: HomeProps) => {
+    useEffect(() => {
+        if (userEmail) {
+            getDashboardData(userEmail).then((data) => {
+                console.log("Dashboard Data: ", data);
+                setDashboard(data);
+            });
+        }
+    }, [userEmail]);
+
     return (
         <AuthenticatedRoute>
             <Head>
@@ -16,25 +26,15 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
             <div className="h-screen">
                 <Layout title="Dashboard">
                     <Dashboard
-                        customers={props.dashboard.customers}
-                        products={props.dashboard.products}
-                        sales={props.dashboard.sales}
-                        salesByMonth={props.dashboard.salesByMonth}
+                        customers={dashboard?.customers || 0}
+                        products={dashboard?.products || 0}
+                        sales={dashboard?.sales || 0}
+                        salesByMonth={dashboard?.salesByMonth}
                     />
                 </Layout>
             </div>
         </AuthenticatedRoute>
     );
 };
-
-export async function getStaticProps(context: any) {
-    const dashboard: DashboardData = await getDashboardData();
-    return {
-        props: {
-            dashboard,
-        },
-        revalidate: 10,
-    };
-}
 
 export default Home;

@@ -7,4 +7,5 @@ export interface Customer {
     email?: string;
     phone?: string;
     registrationDate?: string;
+    userEmail?: string;
 }

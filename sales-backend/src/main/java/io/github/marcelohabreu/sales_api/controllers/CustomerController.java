@@ -20,13 +20,14 @@ public class CustomerController {
     public Page<CustomerFormDTO> list(
             @RequestParam(value = "name", required = false, defaultValue = "") String name,
             @RequestParam(value = "cpf", required = false, defaultValue = "") String cpf,
+            @RequestParam(value = "userEmail", required = false, defaultValue = "") String userEmail,
             Pageable pageable){
-        return service.listAllCustomers(name,cpf,pageable);
+        return service.listAllCustomers(name,cpf,userEmail,pageable);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CustomerFormDTO> getCustomer(@PathVariable Long id){
-        return service.getByIdCustomer(id);
+    public ResponseEntity<CustomerFormDTO> getCustomer(@PathVariable Long id, String userEmail){
+        return service.getByIdCustomer(id, userEmail);
     }
 
     @PostMapping
@@ -35,12 +36,12 @@ public class CustomerController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CustomerFormDTO c){
-        return service.updateCustomer(id,c);
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CustomerFormDTO c, String userEmail){
+        return service.updateCustomer(id,c, userEmail);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
-        return service.deleteCustomer(id);
+    public ResponseEntity<Object> delete(@PathVariable Long id, String userEmail){
+        return service.deleteCustomer(id, userEmail);
     }
 }

@@ -27,7 +27,7 @@ public class ReportSalesService {
     @Autowired
     private DataSource dataSource;
 
-    public byte[] generateReport(Long idCustomer, Date startDate, Date endDate) throws RuntimeException {
+    public byte[] generateReport(Long idCustomer, Date startDate, Date endDate, String userEmail) throws RuntimeException {
 
         // try with resource
         try (
@@ -43,6 +43,7 @@ public class ReportSalesService {
             parameters.put("ID_CUSTOMER", idCustomer);
             parameters.put("START_DATE", startDate);
             parameters.put("END_DATE", endDate);
+            parameters.put("USER_EMAIL", userEmail);
 
             return JasperRunManager.runReportToPdf(
                     reportSalesCompiled.getInputStream(),

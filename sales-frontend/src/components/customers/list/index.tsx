@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { useUser } from "@/context/UserContext";
 
 interface ConsultCustomersForm {
     name?: string;
@@ -23,6 +24,8 @@ export const CustomerList: React.FC = () => {
     const [, setLoading] = useState<boolean>(false);
 
     const router = useRouter();
+
+    const { userEmail } = useUser();
 
     useEffect(() => {
         handleSubmit(filter);
@@ -62,7 +65,7 @@ export const CustomerList: React.FC = () => {
         setLoading(true);
         const page = event.first / event.rows;
         service
-            .find(filter.name, filter.cpf, page, event?.rows)
+            .find(filter.name, filter.cpf, page, event?.rows, userEmail || "")
             .then((result) => {
                 setCustomers({ ...result, first: event.first });
             })
@@ -72,7 +75,7 @@ export const CustomerList: React.FC = () => {
     const [, setDeleting] = useState<boolean>(false);
     const onDelete = (customer: Customer) => {
         service
-            .remove(customer.id || "")
+            .remove(customer.id || "", userEmail || "")
             .then(() => handleSubmit(filter))
             .finally(() => setDeleting(false));
     };

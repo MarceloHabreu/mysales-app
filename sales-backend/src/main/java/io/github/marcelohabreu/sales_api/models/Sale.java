@@ -31,20 +31,23 @@ public class Sale {
     @Column(name = "date_sale")
     private LocalDateTime dateRegister;
 
+    private String userEmail;
+
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         setDateRegister(LocalDateTime.now());
     }
 
     public Sale() {
     }
 
-    public Sale(Long id, Customer customer, PaymentMethod paymentMethod, List<ItemSale> items, BigDecimal total) {
+    public Sale(Long id, Customer customer, PaymentMethod paymentMethod, List<ItemSale> items, BigDecimal total, String userEmail) {
         this.id = id;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
         this.items = items;
         this.total = total;
+        this.userEmail = userEmail;
     }
 
     public Long getId() {
@@ -93,5 +96,13 @@ public class Sale {
 
     public void setDateRegister(LocalDateTime dateRegister) {
         this.dateRegister = dateRegister;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { validationScheme } from "./validationSchema";
 import { FiTrash2 } from "react-icons/fi";
+import { useUser } from "@/context/UserContext";
 
 // Intl uma lib nativa do js que permite internacionalizaçao de valor
 const formatterMoney = new Intl.NumberFormat("pt-BR", {
@@ -46,6 +47,8 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const [message, setMessage] = useState<string>("");
     const [codeProduct, setCodeProduct] = useState<string>("");
 
+    const { userEmail } = useUser();
+
     const formik = useFormik<Sale>({
         onSubmit,
         initialValues: formSchema,
@@ -66,7 +69,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const handleCustomerAutoComplete = (e: AutoCompleteCompleteEvent) => {
         const name = e.query;
         customerService
-            .find(name, "", 0, 20)
+            .find(name, "", 0, 20, userEmail || "")
             .then((response) => {
                 setListCustomers(response.content || []);
             })
@@ -92,7 +95,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const handleCodeProductBlur = () => {
         if (codeProduct) {
             productService
-                .loadProduct(codeProduct)
+                .loadProduct(codeProduct, userEmail || "")
                 .then((productFound) => {
                     setProduct(productFound);
                 })
@@ -131,7 +134,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
 
     const handleProductAutoComplete = async (e: AutoCompleteCompleteEvent) => {
         if (!listProducts.length) {
-            const productsFound = await productService.list();
+            const productsFound = await productService.list(userEmail || "");
             setListProducts(productsFound);
         }
 
@@ -240,7 +243,10 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
                                 <InputText
                                     id="qtyProduct"
                                     value={qtyProduct.toString()}
-                                    onChange={(e) => setQtyProduct(parseInt(e.target.value))}
+                                    onChange={(e) => {
+                                        const value = parseInt(e.target.value);
+                                        setQtyProduct(isNaN(value) ? "" : value);
+                                    }}
                                     className="w-full p-3 border rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                                 />
                                 <label htmlFor="qtyProduct" className="text-gray-500">

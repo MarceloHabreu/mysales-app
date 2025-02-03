@@ -10,13 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @RestController
@@ -35,7 +30,8 @@ public class SaleController {
 
     @PostMapping
     @Transactional
-    public void makingSale(@RequestBody Sale sale) {
+    public void makingSale(@RequestBody Sale sale, @RequestParam(value = "userEmail") String userEmail) {
+        sale.setUserEmail(userEmail);
         saleRepository.save(sale);
         sale.getItems().forEach(is -> is.setSale(sale));
         itemSaleRepository.saveAll(sale.getItems());
@@ -45,7 +41,8 @@ public class SaleController {
     public ResponseEntity<byte[]> reportSales(
             @RequestParam(value = "id", required = false, defaultValue = "") Long id,
             @RequestParam(value = "start", required = false, defaultValue = "") String start,
-            @RequestParam(value = "end", required = false, defaultValue = "") String end
+            @RequestParam(value = "end", required = false, defaultValue = "") String end,
+            @RequestParam(value = "userEmail") String userEmail
     ) {
         Date startDate = DateUtils.fromString(start);
         Date endDate = DateUtils.fromString(end, true);
@@ -58,7 +55,7 @@ public class SaleController {
             endDate = DateUtils.today(true);
         }
 
-        byte[] reportGenerated = reportSalesService.generateReport(id,startDate,endDate);
+        byte[] reportGenerated = reportSalesService.generateReport(id,startDate,endDate, userEmail);
 
         HttpHeaders headers = new HttpHeaders();
         var fileName = "report-sales.pdf";

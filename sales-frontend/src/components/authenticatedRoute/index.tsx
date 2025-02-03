@@ -27,5 +27,8 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({ children
         return null;
     }
 
+    const userEmail = session?.user?.email;
+    console.log(userEmail);
+
     return <div>{children}</div>;
 };

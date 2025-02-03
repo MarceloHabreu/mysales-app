@@ -4,16 +4,17 @@ import { SalesForm } from "./form";
 import { useSaleService } from "@/app/services";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useUser } from "@/context/UserContext";
 
 export const Sales: React.FC = () => {
     const service = useSaleService();
     const [saleCompleted, setSaleCompleted] = useState<boolean>(false);
 
-    const handleSubmit = (sale: Sale) => {
-        console.log(sale);
+    const { userEmail } = useUser();
 
+    const handleSubmit = (sale: Sale) => {
         service
-            .makingSale(sale)
+            .makingSale(sale, userEmail || "")
             .then(() => {
                 toast.success("sale successfully completed");
                 setSaleCompleted(true);

@@ -13,9 +13,15 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "select extract (month from s.date_sale) as month, sum(s.total) as value " +
                     "from sale as s " +
                     "where extract (year from s.date_sale) = :year " +
+                    "AND s.user_email = :userEmail " +
                     "group by extract (month from s.date_sale) " +
                     "order by extract (month from s.date_sale) "
 
     )
-    List<SaleByMonth> getSumSalesByMonth(@Param(("year")) Integer year);
+    List<SaleByMonth> getSumSalesByMonth(@Param(("year")) Integer year,
+                                         @Param(("userEmail")) String userEmail
+    );
+
+    @Query(value = "select count(*) from sale where user_email = :userEmail", nativeQuery = true)
+    Long countByUserEmail(@Param("userEmail") String userEmail);
 }

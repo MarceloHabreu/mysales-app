@@ -3,6 +3,7 @@ import { Customer } from "@/app/models/customers";
 import { useCustomerService, useSaleService } from "@/app/services";
 import { InputDate } from "@/components/common";
 import { Layout } from "@/components/layout";
+import { useUser } from "@/context/UserContext";
 import { useFormik } from "formik";
 import { AutoComplete, AutoCompleteChangeEvent, AutoCompleteCompleteEvent } from "primereact/autocomplete";
 import { Button } from "primereact/button";
@@ -24,14 +25,18 @@ export const ReportSales: React.FC = () => {
         totalElements: 0,
     });
 
+    const { userEmail } = useUser();
+
     const customerService = useCustomerService();
     const salesService = useSaleService();
 
     const handleSubmit = (dateForm: ReportSaleForm) => {
-        salesService.generateReportSales(dateForm.customer?.id, dateForm.startDate, dateForm.endDate).then((blob) => {
-            const fileURL = URL.createObjectURL(blob);
-            window.open(fileURL);
-        });
+        salesService
+            .generateReportSales(dateForm.customer?.id, dateForm.startDate, dateForm.endDate, userEmail || "")
+            .then((blob) => {
+                const fileURL = URL.createObjectURL(blob);
+                window.open(fileURL);
+            });
         console.log(dateForm);
     };
 
@@ -42,7 +47,7 @@ export const ReportSales: React.FC = () => {
 
     const handleCustomerAutoComplete = (e: AutoCompleteCompleteEvent) => {
         const name = e.query;
-        customerService.find(name, "", 0, 20).then((response) => {
+        customerService.find(name, "", 0, 20, userEmail || "").then((response) => {
             setListCustomers(response);
         });
     };

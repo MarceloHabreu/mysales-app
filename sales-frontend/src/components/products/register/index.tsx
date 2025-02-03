@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { InputMoney } from "@/components/common";
+import { useUser } from "@/context/UserContext";
 
 interface FormErrors {
     sku?: string;
@@ -39,18 +40,20 @@ export const ProductRegistration: React.FC = () => {
     const router = useRouter();
     const { id: queryId } = router.query;
 
+    const { userEmail } = useUser();
+
     useEffect(() => {
         if (queryId && typeof queryId === "string") {
-            service.loadProduct(queryId).then((productFound) => {
+            service.loadProduct(queryId, userEmail || "").then((productFound) => {
                 setId(productFound.id || "");
                 setSku(productFound.sku);
                 setRegistration(productFound.registrationDate || "");
                 setName(productFound.name);
                 setDescription(productFound.description || "");
-                setPrice(formatReal(`${productFound.price}`));
+                setPrice(formatReal(productFound.price.toFixed(2)));
             });
         }
-    }, [queryId]);
+    }, [queryId, userEmail]);
 
     const handleSkuChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSku(e.target.value);
@@ -84,12 +87,12 @@ export const ProductRegistration: React.FC = () => {
             .then((obj) => {
                 setErrors({});
                 if (id) {
-                    service.update(product).then(() => {
+                    service.update(product, userEmail || "").then(() => {
                         toast.success("Product Successfuly Updated");
                         router.push("/list/products");
                     });
                 } else {
-                    service.save(product).then((productResponse) => {
+                    service.save(product, userEmail || "").then((productResponse) => {
                         setId(productResponse.id || "");
                         setRegistration(productResponse.registrationDate || "");
                         toast.success("Product Successfuly Saved");

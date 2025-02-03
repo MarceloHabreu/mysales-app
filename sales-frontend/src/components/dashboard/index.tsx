@@ -10,33 +10,37 @@ interface DashboardProps {
     sales?: number;
     salesByMonth?: SaleByMonth[];
 }
+
 export const Dashboard: React.FC<DashboardProps> = ({ customers, products, sales, salesByMonth }) => {
     const [chartData, setChartData] = useState({});
 
     const loadGraphicData = () => {
-        const labels = salesByMonth?.map((sm) => {
-            if (sm && sm.month !== undefined) {
-                return months[sm.month - 1];
-            }
-            return "";
-        });
-        const values = salesByMonth?.map((sm) => `${sm.value}`);
+        if (salesByMonth) {
+            const labels = salesByMonth.map((sm) => {
+                if (sm && sm.month !== undefined) {
+                    return months[sm.month - 1];
+                }
+                return "";
+            });
 
-        const dataGraphic = {
-            labels: labels,
-            datasets: [
-                {
-                    label: "Monthly Sales",
-                    backgroundColor: "#42A5F5",
-                    data: values,
-                },
-            ],
-        };
+            const values = salesByMonth.map((sm) => sm.value);
 
-        setChartData(dataGraphic);
+            const dataGraphic = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Monthly Sales",
+                        backgroundColor: "#42A5F5",
+                        data: values,
+                    },
+                ],
+            };
+
+            setChartData(dataGraphic);
+        }
     };
 
-    useEffect(loadGraphicData, []);
+    useEffect(loadGraphicData, [salesByMonth]);
 
     const productCardStyle = {
         background: "red",
@@ -50,6 +54,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ customers, products, sales
         background: "green",
         color: "white",
     };
+
     return (
         <>
             <div className="grid grid-cols-3 gap-4">

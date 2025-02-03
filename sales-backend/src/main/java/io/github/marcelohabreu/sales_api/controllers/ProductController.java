@@ -18,31 +18,32 @@ public class ProductController {
     private ProductService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ProductFormDTO p){
+    public ResponseEntity<?> create(@RequestBody ProductFormDTO p) {
         return service.saveProduct(p);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody ProductFormDTO p) {
-        return service.updateProduct(id,p);
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody ProductFormDTO p, String userEmail) {
+        return service.updateProduct(id, p, userEmail);
     }
 
     @GetMapping
     public List<ProductFormDTO> list(
             @RequestParam(value = "name", required = false, defaultValue = "") String name,
-            @RequestParam(value = "sku", required = false, defaultValue = "") String sku
-    ){
-        return service.listAllProducts(name, sku);
+            @RequestParam(value = "sku", required = false, defaultValue = "") String sku,
+            @RequestParam(value = "userEmail", required = false, defaultValue = "") String userEmail
+    ) {
+        return service.listAllProducts(name, sku, userEmail);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ProductFormDTO> getProduct(@PathVariable Long id){
-        return service.getByIdProduct(id);
+    public ResponseEntity<ProductFormDTO> getProduct(@PathVariable Long id, String userEmail) {
+        return service.getByIdProduct(id, userEmail);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
-        return service.deleteProduct(id);
+    public ResponseEntity<Object> delete(@PathVariable Long id, String userEmail) {
+        return service.deleteProduct(id, userEmail);
     }
 }
 

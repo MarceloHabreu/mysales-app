@@ -12,10 +12,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE " +
             "upper(p.name) LIKE upper(:name) AND " +
-            "upper(p.sku) LIKE upper(:sku)")
+            "upper(p.sku) LIKE upper(:sku) AND " +
+            "p.userEmail = :userEmail")
     List<Product> findByNameAndSku(
             @Param("name") String name,
             @Param("sku") String sku,
+            @Param("userEmail") String userEmail,
             Sort sort
     );
+
+    @Query(value = "select count(*) from product where user_email = :userEmail", nativeQuery = true)
+    Long countByUserEmail(@Param("userEmail") String userEmail);
 }

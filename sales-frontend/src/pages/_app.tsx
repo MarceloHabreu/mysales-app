@@ -5,13 +5,16 @@ import "react-toastify/dist/ReactToastify.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/mdc-light-indigo/theme.css";
 import { SessionProvider } from "next-auth/react";
+import { UserProvider } from "@/context/UserContext";
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <SessionProvider session={pageProps.session}>
-                <Component {...pageProps} />
-                <ToastContainer />
+                <UserProvider>
+                    <Component {...pageProps} />
+                    <ToastContainer />
+                </UserProvider>
             </SessionProvider>
         </>
     );

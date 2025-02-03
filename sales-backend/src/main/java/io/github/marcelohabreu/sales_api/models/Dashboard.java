@@ -67,7 +67,7 @@ public class Dashboard {
                 .stream()
                 .mapToInt(SaleByMonth::getMonth)
                 .max()
-                .getAsInt();
+                .orElse(1);
 
         // Creating a list of all months from 1 to the maximum month
         List<Integer> listMonths = IntStream.rangeClosed(1, maximumMonth)
