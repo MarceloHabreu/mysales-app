@@ -1,24 +1,23 @@
 import { Layout } from "@/components/layout";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { TableProducts } from "./table";
 import { Product } from "@/app/models/products";
 import useSWR, { mutate } from "swr";
 import { httpClient } from "@/app/http";
 import { AxiosResponse } from "axios";
-import ClipLoader from "react-spinners/ClipLoader";
 import { useRouter } from "next/router";
 import { useProductService } from "@/app/services";
 import AddIcon from "@mui/icons-material/Add";
 import { Input } from "@/components/common";
 import { useCallback, useState } from "react";
-import { debounce } from "lodash";
 import { useUser } from "@/context/UserContext";
 
 export const ProductList: React.FC = () => {
-    const { userEmail } = useUser();
+    const { userId } = useUser();
     const [filters, setFilters] = useState({ name: "", sku: "" });
+    const encodedUserId = encodeURIComponent(userId || "");
+
     const { data: result, error } = useSWR<AxiosResponse<Product[]>>(
-        `/api/products?name=${filters.name}&sku=${filters.sku}&userEmail=${userEmail}`,
+        `/api/products?name=${filters.name}&sku=${filters.sku}&userId=${encodedUserId}`,
         (url: string) => httpClient.get(url)
     );
 
@@ -30,20 +29,20 @@ export const ProductList: React.FC = () => {
     const router = useRouter();
 
     const update = async (product: Product) => {
-        const url = `/registrations/products?id=${product.id}&userEmail=${userEmail}`;
+        const url = `/registrations/products?id=${product.id}&userId=${encodedUserId}`;
         await router.push(url);
     };
 
     const remove = (product: Product) => {
-        service.remove(product.id || "", userEmail || "").then(() => {
-            mutate(`/api/products?name=${filters.name}&sku=${filters.sku}&userEmail=${userEmail}`);
+        service.remove(product.id || "", userId || "").then(() => {
+            mutate(`/api/products?name=${filters.name}&sku=${filters.sku}&userId=${encodedUserId}`);
         });
     };
 
     return (
         <Layout title="Products">
             <form onSubmit={(e) => e.preventDefault()} className="mb-6">
-                <div className="grid md:grid-cols-2 gap-6 text-zinc-400">
+                <div className="grid md:grid-cols-2 md:gap-6 text-zinc-400">
                     <Input
                         label="Name:"
                         id="name"

@@ -22,7 +22,7 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String userEmail;
+    private String userId;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate registrationDate;
@@ -30,14 +30,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String sku, String name, BigDecimal price, String description, LocalDate registrationDate, String userEmail) {
+    public Product(Long id, String sku, String name, BigDecimal price, String description, LocalDate registrationDate, String userId) {
         this.id = id;
         this.sku = sku;
         this.name = name;
         this.price = price;
         this.description = description;
         this.registrationDate = registrationDate;
-        this.userEmail = userEmail;
+        this.userId = userId;
     }
 
     // Getters e Setters
@@ -89,12 +89,12 @@ public class Product {
         this.registrationDate = registrationDate;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUserId() {  // Alterado de getUserEmail para getUserId
+        return userId;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserId(String userId) {  // Alterado de setUserEmail para setUserId
+        this.userId = userId;
     }
 
     @PrePersist

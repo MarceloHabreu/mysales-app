@@ -4,30 +4,37 @@ import { AxiosResponse } from "axios";
 
 const resourceURL: string = "/api/products";
 
+const encodeUserId = (userId: string): string => encodeURIComponent(userId);
+
 export const useProductService = () => {
-    const save = async (product: Product, userEmail: string): Promise<Product> => {
-        const response: AxiosResponse<Product> = await httpClient.post<Product>(resourceURL, { ...product, userEmail });
+    const save = async (product: Product, userId: string): Promise<Product> => {
+        const response: AxiosResponse<Product> = await httpClient.post<Product>(resourceURL, {
+            ...product,
+            userId: encodeUserId(userId),
+        });
         return response.data;
     };
 
-    const update = async (product: Product, userEmail: string): Promise<void> => {
-        const url: string = `${resourceURL}/${product.id}?userEmail=${userEmail}`;
+    const update = async (product: Product, userId: string): Promise<void> => {
+        const url: string = `${resourceURL}/${product.id}?userId=${encodeUserId(userId)}`;
         await httpClient.put<Product>(url, product);
     };
 
-    const loadProduct = async (id: string, userEmail: string): Promise<Product> => {
-        const url: string = `${resourceURL}/${id}?userEmail=${userEmail}`;
+    const loadProduct = async (id: string, userId: string): Promise<Product> => {
+        const url: string = `${resourceURL}/${id}?userId=${encodeUserId(userId)}`;
         const response: AxiosResponse<Product> = await httpClient.get<Product>(url);
         return response.data;
     };
 
-    const remove = async (id: string, userEmail: string): Promise<void> => {
-        const url: string = `${resourceURL}/${id}?userEmail=${userEmail}`;
+    const remove = async (id: string, userId: string): Promise<void> => {
+        const url: string = `${resourceURL}/${id}?userId=${encodeUserId(userId)}`;
         await httpClient.delete(url);
     };
 
-    const list = async (userEmail: string): Promise<Product[]> => {
-        const response: AxiosResponse<Product[]> = await httpClient.get(`${resourceURL}?userEmail=${userEmail}`);
+    const list = async (userId: string): Promise<Product[]> => {
+        const response: AxiosResponse<Product[]> = await httpClient.get(
+            `${resourceURL}?userId=${encodeUserId(userId)}`
+        );
         return response.data;
     };
 

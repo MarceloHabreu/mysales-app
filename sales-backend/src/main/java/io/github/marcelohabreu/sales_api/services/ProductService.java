@@ -24,40 +24,40 @@ public class ProductService {
         return new ResponseEntity<>(ProductFormDTO.fromModel(newProduct), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Void> updateProduct(Long id, ProductFormDTO p, String userEmail){
+    public ResponseEntity<Void> updateProduct(Long id, ProductFormDTO p, String userId){
         Optional<Product> productOptional = repository.findById(id);
 
-        if (productOptional.isEmpty() || !productOptional.get().getUserEmail().equals(userEmail)){
+        if (productOptional.isEmpty() || !productOptional.get().getUserId().equals(userId)){
             return ResponseEntity.notFound().build();
         }
         Product existingProduct = p.toModel();
         existingProduct.setId(id);
-        existingProduct.setUserEmail(userEmail);
+        existingProduct.setUserId(userId);
         existingProduct.setRegistrationDate(productOptional.get().getRegistrationDate());
         repository.save(existingProduct);
         return ResponseEntity.noContent().build();
     }
 
-    public List<ProductFormDTO> listAllProducts(String name, String sku, String userEmail) {
+    public List<ProductFormDTO> listAllProducts(String name, String sku, String userId) {
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
-        return repository.findByNameAndSku("%" + name + "%", "%" + sku + "%", userEmail, sort)
+        return repository.findByNameAndSku("%" + name + "%", "%" + sku + "%", userId, sort)
                 .stream()
                 .map(ProductFormDTO::fromModel)
                 .toList();
     }
 
-    public ResponseEntity<ProductFormDTO> getByIdProduct(Long id, String userEmail) {
+    public ResponseEntity<ProductFormDTO> getByIdProduct(Long id, String userId) {
         return repository.findById(id)
-                .filter(product -> product.getUserEmail().equals(userEmail))
+                .filter(product -> product.getUserId().equals(userId))
                 .map(ProductFormDTO::fromModel)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Object> deleteProduct(Long id, String userEmail){
+    public ResponseEntity<Object> deleteProduct(Long id, String userId){
         return repository.findById(id)
                 .map(product -> {
-                    if (!product.getUserEmail().equals(userEmail)){
+                    if (!product.getUserId().equals(userId)){
                         return ResponseEntity.notFound().build();
                     }
                     repository.delete(product);

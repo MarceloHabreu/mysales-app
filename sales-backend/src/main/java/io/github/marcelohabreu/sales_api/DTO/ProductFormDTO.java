@@ -14,7 +14,7 @@ public record ProductFormDTO(
         BigDecimal price,
         @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate registrationDate,
-        String userEmail
+        String userId
 ) {
 
 
@@ -26,13 +26,13 @@ public record ProductFormDTO(
                 price,
                 description,
                 registrationDate,
-                userEmail
+                userId
         );
     }
 
     public static ProductFormDTO fromModel(Product p) {
         return new ProductFormDTO(p.getId(), p.getSku(), p.getName(),p.getDescription(),p.getPrice(),
-                 p.getRegistrationDate(), p.getUserEmail());
+                 p.getRegistrationDate(), p.getUserId());
     }
 
 }

@@ -47,7 +47,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const [message, setMessage] = useState<string>("");
     const [codeProduct, setCodeProduct] = useState<string>("");
 
-    const { userEmail } = useUser();
+    const { userId } = useUser();
 
     const formik = useFormik<Sale>({
         onSubmit,
@@ -69,7 +69,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const handleCustomerAutoComplete = (e: AutoCompleteCompleteEvent) => {
         const name = e.query;
         customerService
-            .find(name, "", 0, 20, userEmail || "")
+            .find(name, "", 0, 20, userId || "")
             .then((response) => {
                 setListCustomers(response.content || []);
             })
@@ -95,7 +95,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     const handleCodeProductBlur = () => {
         if (codeProduct) {
             productService
-                .loadProduct(codeProduct, userEmail || "")
+                .loadProduct(codeProduct, userId || "")
                 .then((productFound) => {
                     setProduct(productFound);
                 })
@@ -134,7 +134,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
 
     const handleProductAutoComplete = async (e: AutoCompleteCompleteEvent) => {
         if (!listProducts.length) {
-            const productsFound = await productService.list(userEmail || "");
+            const productsFound = await productService.list(userId || "");
             setListProducts(productsFound);
         }
 
@@ -180,7 +180,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
     };
 
     return (
-        <div className="grid disable-tailwind">
+        <div className="grid-cols-12">
             <form onSubmit={formik.handleSubmit}>
                 <div className="p-fluid">
                     <div className="p-field mb-6">
@@ -204,7 +204,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-12 gap-3 mt-4">
+                    <div className="grid md:grid-cols-12 gap-3 mt-4">
                         {/* Code Input */}
                         <div className="col-span-2">
                             <FloatLabel>
@@ -363,7 +363,7 @@ export const SalesForm: React.FC<SalesFormProps> = ({ onSubmit, saleCompleted, o
                         </small>
                     </div>
 
-                    <div className="grid grid-cols-12 gap-3 mt-5">
+                    <div className="grid md:grid-cols-12 gap-3 mt-5">
                         <div className="col-span-4">
                             <label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700 mb-2">
                                 Payment Method: *

@@ -30,32 +30,32 @@ public class CustomerService {
         return new ResponseEntity<>(CustomerFormDTO.fromModel(newCustomer), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Void> updateCustomer(Long id, CustomerFormDTO c, String userEmail) {
+    public ResponseEntity<Void> updateCustomer(Long id, CustomerFormDTO c, String userId) {
         Optional<Customer> customerOptional = repository.findById(id);
 
-        if (customerOptional.isEmpty() || !customerOptional.get().getUserEmail().equals(userEmail)) {
+        if (customerOptional.isEmpty() || !customerOptional.get().getUserId().equals(userId)) {
             return ResponseEntity.notFound().build();
         }
 
         Customer existingCustomer = c.toModel();
         existingCustomer.setId(id);
-        existingCustomer.setUserEmail(userEmail);
+        existingCustomer.setUserId(userId);
         existingCustomer.setRegistrationDate(customerOptional.get().getRegistrationDate());
         repository.save(existingCustomer);
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<CustomerFormDTO> getByIdCustomer(Long id, String userEmail) {
+    public ResponseEntity<CustomerFormDTO> getByIdCustomer(Long id, String userId) {
         return repository.findById(id)
-                .filter(customer -> customer.getUserEmail().equals(userEmail))
+                .filter(customer -> customer.getUserId().equals(userId))
                 .map(CustomerFormDTO::fromModel)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Object> deleteCustomer(Long id, String userEmail){
+    public ResponseEntity<Object> deleteCustomer(Long id, String userId){
         return repository.findById(id)
-                .filter(customer -> customer.getUserEmail().equals(userEmail))
+                .filter(customer -> customer.getUserId().equals(userId))
                 .map(customer -> {
                     repository.delete(customer);
                     return ResponseEntity.noContent().build();
@@ -63,11 +63,11 @@ public class CustomerService {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public Page<CustomerFormDTO> listAllCustomers(String name, String cpf,String userEmail, Pageable pageable) {
+    public Page<CustomerFormDTO> listAllCustomers(String name, String cpf,String userId, Pageable pageable) {
         // Criando o PageRequest com a ordenação desejada (por id ascendente)
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "id"));
 
-        return repository.findByNameOrCpf("%" + name + "%", "%" + cpf + "%", userEmail, sortedPageable)
+        return repository.findByNameOrCpf("%" + name + "%", "%" + cpf + "%", userId, sortedPageable)
                 .map(CustomerFormDTO::fromModel);
     }
 }

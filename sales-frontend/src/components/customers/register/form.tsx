@@ -44,7 +44,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({ customer, onSubmit }
     return (
         <form onSubmit={formik.handleSubmit} className="h-full mt-4 flex flex-col gap-4">
             {formik.values.id && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-zinc-400">
+                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 text-zinc-400">
                     <Input
                         className="bg-gray-200 text-gray-500 border-none cursor-not-allowed opacity-70"
                         id="id"

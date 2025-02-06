@@ -25,7 +25,7 @@ export const CustomerList: React.FC = () => {
 
     const router = useRouter();
 
-    const { userEmail } = useUser();
+    const { userId } = useUser();
 
     useEffect(() => {
         handleSubmit(filter);
@@ -61,11 +61,13 @@ export const CustomerList: React.FC = () => {
         },
     });
 
+    const encodedUserId = encodeURIComponent(userId || "");
+
     const handlePage = (event: any) => {
         setLoading(true);
         const page = event.first / event.rows;
         service
-            .find(filter.name, filter.cpf, page, event?.rows, userEmail || "")
+            .find(filter.name, filter.cpf, page, event?.rows, userId || "")
             .then((result) => {
                 setCustomers({ ...result, first: event.first });
             })
@@ -75,7 +77,7 @@ export const CustomerList: React.FC = () => {
     const [, setDeleting] = useState<boolean>(false);
     const onDelete = (customer: Customer) => {
         service
-            .remove(customer.id || "", userEmail || "")
+            .remove(customer.id || "", userId || "")
             .then(() => handleSubmit(filter))
             .finally(() => setDeleting(false));
     };
@@ -125,7 +127,7 @@ export const CustomerList: React.FC = () => {
     return (
         <Layout title="Customers">
             <form onSubmit={formikSubmit} className="mb-6">
-                <div className="grid md:grid-cols-2 gap-6 text-zinc-400">
+                <div className="grid md:grid-cols-2 md:gap-6 text-zinc-400">
                     <Input
                         label="Name:"
                         id="name"

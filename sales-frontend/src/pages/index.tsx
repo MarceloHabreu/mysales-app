@@ -6,17 +6,16 @@ import { useUser } from "@/context/UserContext";
 import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
-    const { userEmail } = useUser();
+    const { userId } = useUser();
     const [dashboard, setDashboard] = useState<DashboardData | null>(null);
 
     useEffect(() => {
-        if (userEmail) {
-            getDashboardData(userEmail).then((data) => {
-                console.log("Dashboard Data: ", data);
+        if (userId) {
+            getDashboardData(userId).then((data) => {
                 setDashboard(data);
             });
         }
-    }, [userEmail]);
+    }, [userId]);
 
     return (
         <AuthenticatedRoute>

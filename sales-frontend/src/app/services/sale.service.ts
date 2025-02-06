@@ -3,12 +3,13 @@ import { httpClient } from "../http";
 import { Sale } from "../models/sales";
 
 const resourceURL = "/api/sales";
+const encodeUserId = (userId: string): string => encodeURIComponent(userId);
 
 export const useSaleService = () => {
-    const makingSale = async (sale: Sale, userEmail: string): Promise<void> => {
+    const makingSale = async (sale: Sale, userId: string): Promise<void> => {
         await httpClient.post<Sale>(resourceURL, sale, {
             params: {
-                userEmail,
+                userId: encodeUserId(userId),
             },
         });
     };
@@ -17,9 +18,11 @@ export const useSaleService = () => {
         idCustomer: string = "",
         startDate: string = "",
         endDate: string = "",
-        userEmail: string
+        userId: string
     ): Promise<Blob> => {
-        const url: string = `${resourceURL}/report-sales?id=${idCustomer}&start=${startDate}&end=${endDate}&userEmail=${userEmail}`;
+        const url: string = `${resourceURL}/report-sales?id=${idCustomer}&start=${startDate}&end=${endDate}&userId=${encodeUserId(
+            userId
+        )}`;
         const response: AxiosResponse = await httpClient.get(url, { responseType: "blob" });
         const bytes = response.data;
         return new Blob([bytes], { type: "application/pdf" });

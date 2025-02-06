@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -27,7 +29,12 @@ public class ReportSalesService {
     @Autowired
     private DataSource dataSource;
 
-    public byte[] generateReport(Long idCustomer, Date startDate, Date endDate, String userEmail) throws RuntimeException {
+    private String encodeUserId(String userId){
+        return URLEncoder.encode(userId, StandardCharsets.UTF_8);
+    }
+
+
+    public byte[] generateReport(Long idCustomer, Date startDate, Date endDate, String userId) throws RuntimeException {
 
         // try with resource
         try (
@@ -43,7 +50,7 @@ public class ReportSalesService {
             parameters.put("ID_CUSTOMER", idCustomer);
             parameters.put("START_DATE", startDate);
             parameters.put("END_DATE", endDate);
-            parameters.put("USER_EMAIL", userEmail);
+            parameters.put("USER_ID", encodeUserId(userId));
 
             return JasperRunManager.runReportToPdf(
                     reportSalesCompiled.getInputStream(),

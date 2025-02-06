@@ -31,7 +31,7 @@ public class Sale {
     @Column(name = "date_sale")
     private LocalDateTime dateRegister;
 
-    private String userEmail;
+    private String userId;
 
     @PrePersist
     public void prePersist() {
@@ -41,13 +41,13 @@ public class Sale {
     public Sale() {
     }
 
-    public Sale(Long id, Customer customer, PaymentMethod paymentMethod, List<ItemSale> items, BigDecimal total, String userEmail) {
+    public Sale(Long id, Customer customer, PaymentMethod paymentMethod, List<ItemSale> items, BigDecimal total, String userId) {
         this.id = id;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
         this.items = items;
         this.total = total;
-        this.userEmail = userEmail;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -98,11 +98,11 @@ public class Sale {
         this.dateRegister = dateRegister;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

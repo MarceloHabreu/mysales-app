@@ -13,22 +13,22 @@ export const CustomerRegistration: React.FC = () => {
     const router = useRouter();
     const { id: queryId } = router.query;
 
-    const { userEmail } = useUser();
+    const { userId } = useUser();
 
     useEffect(() => {
         if (queryId && typeof queryId === "string") {
-            service.loadCustomer(queryId, userEmail || "").then((customerFound) => setCustomer(customerFound));
+            service.loadCustomer(queryId, userId || "").then((customerFound) => setCustomer(customerFound));
         }
-    }, [queryId, userEmail]);
+    }, [queryId, userId]);
 
     const handleSubmit = async (customer: Customer) => {
         try {
             if (customer.id) {
-                await service.update(customer, userEmail || "");
+                await service.update(customer, userId || "");
                 router.push("/list/customers");
                 toast.success("Customer Successfully Updated");
             } else {
-                const savedCustomer = await service.save(customer, userEmail || "");
+                const savedCustomer = await service.save(customer, userId || "");
                 if (savedCustomer !== "error") {
                     setCustomer(savedCustomer);
                     toast.success("Customer Successfully Saved");

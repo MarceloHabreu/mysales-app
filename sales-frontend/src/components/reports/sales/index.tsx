@@ -7,7 +7,6 @@ import { useUser } from "@/context/UserContext";
 import { useFormik } from "formik";
 import { AutoComplete, AutoCompleteChangeEvent, AutoCompleteCompleteEvent } from "primereact/autocomplete";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 
 interface ReportSaleForm {
@@ -25,14 +24,14 @@ export const ReportSales: React.FC = () => {
         totalElements: 0,
     });
 
-    const { userEmail } = useUser();
+    const { userId } = useUser();
 
     const customerService = useCustomerService();
     const salesService = useSaleService();
 
     const handleSubmit = (dateForm: ReportSaleForm) => {
         salesService
-            .generateReportSales(dateForm.customer?.id, dateForm.startDate, dateForm.endDate, userEmail || "")
+            .generateReportSales(dateForm.customer?.id, dateForm.startDate, dateForm.endDate, userId || "")
             .then((blob) => {
                 const fileURL = URL.createObjectURL(blob);
                 window.open(fileURL);
@@ -47,7 +46,7 @@ export const ReportSales: React.FC = () => {
 
     const handleCustomerAutoComplete = (e: AutoCompleteCompleteEvent) => {
         const name = e.query;
-        customerService.find(name, "", 0, 20, userEmail || "").then((response) => {
+        customerService.find(name, "", 0, 20, userId || "").then((response) => {
             setListCustomers(response);
         });
     };

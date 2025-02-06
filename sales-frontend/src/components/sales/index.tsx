@@ -10,11 +10,11 @@ export const Sales: React.FC = () => {
     const service = useSaleService();
     const [saleCompleted, setSaleCompleted] = useState<boolean>(false);
 
-    const { userEmail } = useUser();
+    const { userId } = useUser();
 
     const handleSubmit = (sale: Sale) => {
         service
-            .makingSale(sale, userEmail || "")
+            .makingSale(sale, userId || "")
             .then(() => {
                 toast.success("sale successfully completed");
                 setSaleCompleted(true);
