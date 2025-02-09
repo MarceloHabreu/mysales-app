@@ -79,7 +79,7 @@ Acesse **http://localhost:3000** para visualizar a aplicação.
 
 ## 📎 Links
 
-🔗 **Repositório:** [MarceloHabreu/sales-app](https://github.com/MarceloHabreu/sales-app)  
+🔗 **Repositório:** [MarceloHabreu/sales-app](https://github.com/MarceloHabreu/mysales-app)  
 🔗 **Aplicação:** [app-mysales.vercel.app](https://app-mysales.vercel.app)
 
 ## 🎉 Contribuição
