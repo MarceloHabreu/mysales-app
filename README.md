@@ -1,7 +1,5 @@
 # Sales App - Sistema de Gerenciamento de Vendas
 
-![Sales App](https://user-images.githubusercontent.com/your-image-link.png)
-
 ## 📌 Descrição do Projeto
 
 O **Sales App** é uma aplicação web desenvolvida como parte do curso de **Desenvolvimento Fullstack** da Udemy, utilizando **Next.js** no frontend e **Spring Boot** no backend. O projeto permite o gerenciamento de produtos, clientes e vendas, além da geração de relatórios detalhados para análise de dados.
